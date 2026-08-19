@@ -12,22 +12,22 @@ import {
   Search, 
   Building2, 
   Layers, 
-  ExternalLink,
-  RefreshCw,
-  Send,
-  Cpu,
-  Mail,
-  Phone,
-  Globe,
-  MapPin,
-  QrCode,
-  CreditCard
+  ExternalLink, 
+  RefreshCw, 
+  Send, 
+  Cpu, 
+  Mail, 
+  Phone, 
+  Globe, 
+  MapPin, 
+  CreditCard,
+  Maximize2
 } from 'lucide-react';
 
 export default function IntelligenceView({ onIngestionComplete }) {
   const [activeSubTab, setActiveSubTab] = useState('batch_ocr');
 
-  // 8 High-Fidelity Realistic Physical Business Card Mockups
+  // Realistic Business Card Upload Scans with Photorealistic Preview Assets
   const [cards, setCards] = useState([
     {
       id: 1,
@@ -38,7 +38,7 @@ export default function IntelligenceView({ onIngestionComplete }) {
       phone: "+84 (0) 912 345 678",
       address: "Floor 12, Keangnam Landmark 72, Hanoi",
       domain: "nextgenai.vn",
-      cardStyle: "corporate-blue",
+      cardImage: "/assets/cards/card_nextgen.jpg",
       confidence: 100,
       status: "completed"
     },
@@ -51,33 +51,33 @@ export default function IntelligenceView({ onIngestionComplete }) {
       phone: "+84 (0) 988 123 456",
       address: "The Loop Hub, District 1, Ho Chi Minh City",
       domain: "vinfinpay.com",
-      cardStyle: "corporate-gold",
+      cardImage: "/assets/cards/card_vinfin.jpg",
       confidence: 98,
       status: "completed"
     },
     {
       id: 3,
       name: "Alex Chen",
-      title: "General Partner & SEA Lead",
-      company: "Nexus Ventures Singapore",
-      email: "alex.chen@nexusventures.sg",
-      phone: "+65 8123 4567",
-      address: "Marina Bay Financial Centre, Singapore",
-      domain: "nexusventures.sg",
-      cardStyle: "corporate-slate",
+      title: "General Partner & Founder",
+      company: "Dragon Venture Capital",
+      email: "alex.chen@dragonvc.co",
+      phone: "+1 (650) 555-0188",
+      address: "Hai Chau Innovation Center, Danang",
+      domain: "dragonvc.co",
+      cardImage: "/assets/cards/card_dragon.jpg",
       confidence: 96,
       status: "completed"
     },
     {
       id: 4,
-      name: "Phạm Minh Đức",
-      title: "Managing Partner & Angel Investor",
-      company: "Dragon Venture Capital",
-      email: "duc.pham@dragonvc.fund",
-      phone: "+84 (0) 918 777 666",
-      address: "Hai Chau Innovation Center, Danang",
-      domain: "dragonvc.fund",
-      cardStyle: "corporate-burgundy",
+      name: "Sarah Jenkins",
+      title: "Managing Partner & SEA Lead",
+      company: "Nexus Ventures",
+      email: "sarah@nexusventures.co",
+      phone: "+1 (555) 123-4567",
+      address: "450 Tech Way, Singapore & SF",
+      domain: "nexusventures.co",
+      cardImage: "/assets/cards/card_nexus.jpg",
       confidence: 95,
       status: "completed"
     },
@@ -90,25 +90,12 @@ export default function IntelligenceView({ onIngestionComplete }) {
       phone: "+84 (0) 903 888 999",
       address: "Keangnam Landmark 72, Hanoi",
       domain: "nextgenai.vn",
-      cardStyle: "corporate-blue",
+      cardImage: "/assets/cards/card_nextgen.jpg",
       confidence: 92,
       status: "linking"
     },
     {
       id: 6,
-      name: "Hoàng Bích Ngọc",
-      title: "VP of Product Management",
-      company: "EduSmart Interactive",
-      email: "ngoc.hoang@edusmart.edu.vn",
-      phone: "+84 (0) 945 112 233",
-      address: "Saigon Hi-Tech Park, District 9, HCMC",
-      domain: "edusmart.edu.vn",
-      cardStyle: "corporate-teal",
-      confidence: 89,
-      status: "processing"
-    },
-    {
-      id: 7,
       name: "Vũ Đăng Khoa",
       title: "Co-Founder & Chief Technology Officer",
       company: "GreenFuture ESG Tech",
@@ -116,22 +103,9 @@ export default function IntelligenceView({ onIngestionComplete }) {
       phone: "+84 (0) 977 445 566",
       address: "Hoa Lac Hi-Tech Park, Hanoi",
       domain: "greenfuture.vn",
-      cardStyle: "corporate-emerald",
+      cardImage: "/assets/cards/card_nexus.jpg",
       confidence: 91,
       status: "completed"
-    },
-    {
-      id: 8,
-      name: "Arthur Vance",
-      title: "Principal Strategist",
-      company: "Vance Advisory Group",
-      email: "arthur@vanceadvisory.com",
-      phone: "+84 (0) 909 112 334",
-      address: "Le Duan Blvd, District 1, HCMC",
-      domain: "vanceadvisory.com",
-      cardStyle: "corporate-amber",
-      confidence: 65,
-      status: "warning"
     }
   ]);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -160,7 +134,7 @@ export default function IntelligenceView({ onIngestionComplete }) {
   const [queryHistory, setQueryHistory] = useState([
     {
       query: "Identify high-priority venture investors connected to DeepTech and AI founders across 2025-2026 summits.",
-      answer: "Top Venture Capital Partners identified with verified Graph connections:\n1. **Pham Minh Duc** (Managing Partner, Dragon Venture Capital)\n   • Connected to 4 AI Startups (NextGen AI, GreenFuture ESG, CyberGuard Security)\n   • Attended: AI Riser Demo Day 2026 (VIP Sponsor), Startup Summit 2025 (Speaker)\n2. **Alex Chen** (General Partner, Nexus Ventures Singapore)\n   • Cross-border SEA Tech syndicate focus\n   • Direct co-investment relationship with National Innovation Hub.\n*All entities are canonical and anti-hallucination verified against the Knowledge Graph.*",
+      answer: "Top Venture Capital Partners identified with verified Graph connections:\n1. **Pham Minh Duc & Alex Chen** (Managing Partners, Dragon Venture Capital)\n   • Connected to 4 AI Startups (NextGen AI, GreenFuture ESG, CyberGuard Security)\n   • Attended: AI Riser Demo Day 2026 (VIP Sponsor), Startup Summit 2025 (Speaker)\n2. **Sarah Jenkins** (Managing Partner, Nexus Ventures Singapore)\n   • Cross-border SEA Tech syndicate focus\n   • Direct co-investment relationship with National Innovation Hub.\n*All entities are canonical and anti-hallucination verified against the Knowledge Graph.*",
       timestamp: "2m ago"
     },
     {
@@ -185,7 +159,7 @@ export default function IntelligenceView({ onIngestionComplete }) {
         phone: "+84 (0) 988 776 655",
         address: "Lang Ha, Ba Dinh, Hanoi",
         domain: "skyline.ai",
-        cardStyle: "corporate-blue",
+        cardImage: URL.createObjectURL(files[0]),
         confidence: 97,
         status: "completed"
       };
@@ -236,30 +210,30 @@ export default function IntelligenceView({ onIngestionComplete }) {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '26px' }}>
       {/* Sub Header & Tab Switcher */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h2 style={{ fontSize: '24px', fontWeight: '800', color: 'var(--text-main)' }}>
+          <h2 style={{ fontSize: '26px', fontWeight: '800', color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
             Multimodal Intelligence & Ingestion Pipeline
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginTop: '2px' }}>
-            Powered by Google Gemini 2.5/3 Pro Vision OCR, Search Grounding, and Knowledge Graph Query Console.
+          <p style={{ fontSize: '15px', color: 'var(--text-muted)', marginTop: '4px' }}>
+            Extract physical business cards with Google Gemini Multimodal OCR, verify corporate domains with Search Grounding.
           </p>
         </div>
 
         {/* Tab Switcher */}
-        <div style={{ display: 'flex', gap: '6px', backgroundColor: 'var(--bg-muted)', padding: '4px', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
+        <div style={{ display: 'flex', gap: '6px', backgroundColor: 'var(--bg-muted)', padding: '5px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <button
             onClick={() => setActiveSubTab('batch_ocr')}
             style={{
-              padding: '8px 16px',
+              padding: '9px 18px',
               borderRadius: '8px',
               border: 'none',
               backgroundColor: activeSubTab === 'batch_ocr' ? '#FFFFFF' : 'transparent',
               color: activeSubTab === 'batch_ocr' ? 'var(--primary)' : 'var(--text-muted)',
-              fontWeight: activeSubTab === 'batch_ocr' ? '700' : '600',
-              fontSize: '13.5px',
+              fontWeight: activeSubTab === 'batch_ocr' ? '800' : '600',
+              fontSize: '14px',
               cursor: 'pointer',
               boxShadow: activeSubTab === 'batch_ocr' ? 'var(--shadow-sm)' : 'none'
             }}
@@ -269,13 +243,13 @@ export default function IntelligenceView({ onIngestionComplete }) {
           <button
             onClick={() => setActiveSubTab('enrichment')}
             style={{
-              padding: '8px 16px',
+              padding: '9px 18px',
               borderRadius: '8px',
               border: 'none',
               backgroundColor: activeSubTab === 'enrichment' ? '#FFFFFF' : 'transparent',
               color: activeSubTab === 'enrichment' ? 'var(--primary)' : 'var(--text-muted)',
-              fontWeight: activeSubTab === 'enrichment' ? '700' : '600',
-              fontSize: '13.5px',
+              fontWeight: activeSubTab === 'enrichment' ? '800' : '600',
+              fontSize: '14px',
               cursor: 'pointer',
               boxShadow: activeSubTab === 'enrichment' ? 'var(--shadow-sm)' : 'none'
             }}
@@ -285,13 +259,13 @@ export default function IntelligenceView({ onIngestionComplete }) {
           <button
             onClick={() => setActiveSubTab('query_console')}
             style={{
-              padding: '8px 16px',
+              padding: '9px 18px',
               borderRadius: '8px',
               border: 'none',
               backgroundColor: activeSubTab === 'query_console' ? '#FFFFFF' : 'transparent',
               color: activeSubTab === 'query_console' ? 'var(--primary)' : 'var(--text-muted)',
-              fontWeight: activeSubTab === 'query_console' ? '700' : '600',
-              fontSize: '13.5px',
+              fontWeight: activeSubTab === 'query_console' ? '800' : '600',
+              fontSize: '14px',
               cursor: 'pointer',
               boxShadow: activeSubTab === 'query_console' ? 'var(--shadow-sm)' : 'none'
             }}
@@ -303,30 +277,30 @@ export default function IntelligenceView({ onIngestionComplete }) {
 
       {/* TAB 1: BATCH PHYSICAL BUSINESS CARD INGESTION */}
       {activeSubTab === 'batch_ocr' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-            <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
-              Batch multimodal OCR pipeline. Upload physical business card scans to extract bilingual contact fields, match legal domains, and link directly to canonical graph nodes.
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px' }}>
+            <p style={{ fontSize: '14.5px', color: 'var(--text-muted)' }}>
+              Batch multimodal camera & scanner pipeline. Upload physical executive business card photos to automatically extract structured contact fields.
             </p>
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '13.5px' }}>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button className="btn btn-outline" style={{ padding: '9px 18px', fontSize: '14px' }}>
                 <RefreshCw size={15} />
                 <span>History Log (142)</span>
               </button>
               <button 
                 onClick={() => fileInputRef.current?.click()}
                 className="btn btn-secondary" 
-                style={{ padding: '8px 20px', fontSize: '14px' }}
+                style={{ padding: '9px 22px', fontSize: '14.5px' }}
               >
-                <Play size={15} />
+                <Play size={16} />
                 <span>Process All ({cards.length} Cards)</span>
               </button>
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 360px) minmax(0, 1fr)', gap: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 360px) minmax(0, 1fr)', gap: '26px' }}>
             {/* Left Column: Dropzone & Progress */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div 
                 onClick={() => fileInputRef.current?.click()}
                 style={{
@@ -363,11 +337,11 @@ export default function IntelligenceView({ onIngestionComplete }) {
                   <UploadCloud size={28} color="var(--primary)" />
                 </div>
                 <div>
-                  <h4 style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-main)' }}>
+                  <h4 style={{ fontSize: '17px', fontWeight: '800', color: 'var(--text-main)' }}>
                     Drop physical business cards
                   </h4>
-                  <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                    Supports high-res PNG, JPG scans and mobile camera snapshots.
+                  <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                    Supports camera snapshots, PNG, and JPG scans.
                   </p>
                 </div>
 
@@ -375,138 +349,122 @@ export default function IntelligenceView({ onIngestionComplete }) {
                   <button 
                     type="button"
                     className="btn btn-outline" 
-                    style={{ fontSize: '13px', padding: '7px 14px' }}
+                    style={{ fontSize: '13.5px', padding: '8px 16px' }}
                     onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
                   >
-                    <FolderOpen size={15} />
+                    <FolderOpen size={16} />
                     <span>Browse Files</span>
                   </button>
                   <button 
                     type="button"
                     className="btn btn-outline" 
-                    style={{ fontSize: '13px', padding: '7px 14px' }}
+                    style={{ fontSize: '13.5px', padding: '8px 16px' }}
                     onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
                   >
-                    <Camera size={15} />
+                    <Camera size={16} />
                     <span>Take Photo</span>
                   </button>
                 </div>
               </div>
 
               {/* Progress Box */}
-              <div className="card-enterprise" style={{ padding: '20px 22px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <div style={{ fontSize: '11px', textTransform: 'uppercase', fontWeight: '800', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+              <div className="card-enterprise" style={{ padding: '22px 24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div style={{ fontSize: '12px', textTransform: 'uppercase', fontWeight: '800', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
                   Current Ingestion Pipeline
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', fontWeight: '700' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14.5px', fontWeight: '700' }}>
                   <span>Ingested: {cards.length} cards</span>
                   <span style={{ color: 'var(--success)' }}>Completed: {cards.filter(c => c.status === 'completed').length} verified</span>
                 </div>
                 <div style={{ width: '100%', height: '8px', backgroundColor: 'var(--border-color)', borderRadius: '9999px', overflow: 'hidden' }}>
                   <div style={{ width: '85%', height: '100%', backgroundColor: 'var(--primary)' }} />
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'var(--secondary)', fontWeight: '700' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13.5px', color: 'var(--secondary)', fontWeight: '700' }}>
                   <Sparkles size={16} />
                   <span>Gemini Multimodal OCR & Vision Active</span>
                 </div>
               </div>
             </div>
 
-            {/* Right Column: 8 Realistic Business Card Mockups Grid */}
-            <div className="card-enterprise" style={{ padding: '22px 26px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
+            {/* Right Column: 6 Physical Business Card Photos Grid */}
+            <div className="card-enterprise" style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
-                  <h3 style={{ fontSize: '17px', fontWeight: '800', color: 'var(--text-main)' }}>
+                  <h3 style={{ fontSize: '19px', fontWeight: '800', color: 'var(--text-main)' }}>
                     Physical Card Ingestion Queue ({cards.length})
                   </h3>
-                  <p style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>
-                    Extracted structured executive cards with bilingual recognition
+                  <p style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                    Uploaded physical name cards with Gemini Vision OCR extraction
                   </p>
                 </div>
-                <span className="badge badge-primary" style={{ fontSize: '12px', padding: '4px 10px' }}>
-                  8 Cards Loaded
+                <span className="badge badge-primary" style={{ fontSize: '13px', padding: '5px 12px' }}>
+                  {cards.length} Cards Loaded
                 </span>
               </div>
 
-              {/* Grid of Real Physical Card Mockups */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))', gap: '18px' }}>
+              {/* Grid of Real Business Card Photograph Previews */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '22px' }}>
                 {cards.map((card) => (
                   <div 
                     key={card.id}
-                    className="business-card-mockup"
+                    className="card-enterprise"
                     style={{
-                      borderRadius: '12px',
-                      border: '1px solid #CBD5E1',
+                      borderRadius: '14px',
+                      border: '1px solid var(--border-color)',
                       backgroundColor: '#FFFFFF',
-                      minHeight: '190px'
+                      overflow: 'hidden',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      boxShadow: 'var(--shadow-md)'
                     }}
                   >
-                    {/* Top Stripe Accent */}
-                    <div style={{
-                      height: '5px',
-                      width: '100%',
-                      background: card.status === 'warning' ? '#DC2626' : card.cardStyle === 'corporate-gold' ? 'linear-gradient(90deg, #D97706, #F59E0B)' : 'linear-gradient(90deg, #0052CC, #FF8C00)'
-                    }} />
-
-                    {/* Card Header: Company & OCR Badge */}
-                    <div style={{ padding: '12px 16px 8px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', borderBottom: '1px solid #F1F5F9' }}>
-                      <div>
-                        <div style={{ fontSize: '12px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--primary)', fontFamily: 'var(--font-sans)' }}>
-                          {card.company}
-                        </div>
-                        <div style={{ fontSize: '10.5px', color: 'var(--text-light)', fontFamily: 'var(--font-mono)' }}>
-                          {card.domain}
-                        </div>
-                      </div>
-
-                      {/* Status Badge */}
-                      <div>
+                    {/* Realistic Photo Header */}
+                    <div style={{ height: '165px', width: '100%', position: 'relative', overflow: 'hidden', backgroundColor: '#0F172A' }}>
+                      <img 
+                        src={card.cardImage} 
+                        alt="Physical Name Card Photo"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                      <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
                         {card.status === 'completed' && (
-                          <span className="badge badge-success" style={{ fontSize: '11px' }}>
-                            <CheckCircle2 size={12} /> {card.confidence}% OCR
-                          </span>
-                        )}
-                        {card.status === 'processing' && (
-                          <span className="badge badge-primary" style={{ fontSize: '11px' }}>
-                            <Loader2 size={12} className="animate-spin" /> Ingesting...
+                          <span className="badge badge-success" style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', fontSize: '12px' }}>
+                            <CheckCircle2 size={13} /> {card.confidence}% OCR
                           </span>
                         )}
                         {card.status === 'linking' && (
-                          <span className="badge badge-secondary" style={{ fontSize: '11px' }}>
-                            <Sparkles size={12} /> Linking Graph
-                          </span>
-                        )}
-                        {card.status === 'warning' && (
-                          <span className="badge badge-danger" style={{ fontSize: '11px' }}>
-                            <AlertCircle size={12} /> Review ({card.confidence}%)
+                          <span className="badge badge-secondary" style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', fontSize: '12px' }}>
+                            <Sparkles size={13} /> Linking Graph
                           </span>
                         )}
                       </div>
                     </div>
 
-                    {/* Card Body: Executive Name & Title */}
-                    <div style={{ padding: '10px 16px 14px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    {/* Extracted Structured Card Metadata */}
+                    <div style={{ padding: '16px 20px 20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                       <div>
-                        <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-main)', letterSpacing: '-0.01em' }}>
+                        <div style={{ fontSize: '18px', fontWeight: '800', color: 'var(--text-main)', letterSpacing: '-0.01em' }}>
                           {card.name}
                         </div>
-                        <div style={{ fontSize: '12.5px', fontWeight: '600', color: 'var(--gold)', marginTop: '2px' }}>
+                        <div style={{ fontSize: '13.5px', fontWeight: '700', color: 'var(--primary)', marginTop: '2px' }}>
                           {card.title}
+                        </div>
+                        <div style={{ fontSize: '13.5px', fontWeight: '800', color: 'var(--secondary)', marginTop: '2px' }}>
+                          🏢 {card.company}
                         </div>
                       </div>
 
-                      {/* Card Footer: Contact Info Details */}
-                      <div style={{ marginTop: '12px', paddingTop: '8px', borderTop: '1px dashed #E2E8F0', display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '11.5px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-main)' }}>
-                          <Mail size={12} color="var(--primary)" />
-                          <span style={{ fontFamily: 'var(--font-mono)' }}>{card.email}</span>
+                      {/* Contact Fields with Icons */}
+                      <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-main)' }}>
+                          <Mail size={14} color="var(--primary)" />
+                          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '600' }}>{card.email}</span>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)' }}>
-                          <Phone size={12} color="var(--secondary)" />
-                          <span style={{ fontFamily: 'var(--font-mono)' }}>{card.phone}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-muted)' }}>
+                          <Phone size={14} color="var(--secondary)" />
+                          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '600' }}>{card.phone}</span>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-light)', fontSize: '10.5px' }}>
-                          <MapPin size={12} color="#64748B" />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-light)', fontSize: '12px' }}>
+                          <MapPin size={14} color="#64748B" />
                           <span>{card.address}</span>
                         </div>
                       </div>
@@ -521,20 +479,20 @@ export default function IntelligenceView({ onIngestionComplete }) {
 
       {/* TAB 2: GOOGLE SEARCH GROUNDING */}
       {activeSubTab === 'enrichment' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 420px) minmax(0, 1fr)', gap: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 420px) minmax(0, 1fr)', gap: '26px' }}>
           {/* Left Form */}
-          <div className="card-enterprise" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Building2 size={20} color="var(--primary)" />
-              <h3 style={{ fontSize: '17px', fontWeight: '800' }}>Company Search Grounding</h3>
+          <div className="card-enterprise" style={{ padding: '26px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Building2 size={22} color="var(--primary)" />
+              <h3 style={{ fontSize: '19px', fontWeight: '800' }}>Company Search Grounding</h3>
             </div>
-            <p style={{ fontSize: '13.5px', color: 'var(--text-muted)' }}>
+            <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
               Lookup corporate profiles using Google Search Grounding to verify legal entities, industry codes, and citations.
             </p>
 
             {/* Quick Chips */}
             <div>
-              <div style={{ fontSize: '11px', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '8px', fontFamily: 'var(--font-mono)' }}>
+              <div style={{ fontSize: '12px', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '10px', fontFamily: 'var(--font-mono)' }}>
                 Quick Lookup Suggestions:
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -544,7 +502,7 @@ export default function IntelligenceView({ onIngestionComplete }) {
                     type="button"
                     onClick={() => { setCompanyQuery(name); handleEnrichCompany(name); }}
                     className="btn btn-outline"
-                    style={{ fontSize: '12.5px', padding: '6px 12px', borderRadius: '8px' }}
+                    style={{ fontSize: '13px', padding: '7px 14px', borderRadius: '8px' }}
                   >
                     {name}
                   </button>
@@ -552,43 +510,44 @@ export default function IntelligenceView({ onIngestionComplete }) {
               </div>
             </div>
 
-            <form onSubmit={(e) => { e.preventDefault(); handleEnrichCompany(); }} style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '6px' }}>
+            <form onSubmit={(e) => { e.preventDefault(); handleEnrichCompany(); }} style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '6px' }}>
               <input 
                 type="text"
                 placeholder="Enter enterprise or startup name..."
                 value={companyQuery}
                 onChange={(e) => setCompanyQuery(e.target.value)}
                 className="input-enterprise"
+                style={{ height: '46px', fontSize: '14.5px' }}
               />
               <button 
                 type="submit" 
                 disabled={isEnriching}
                 className="btn btn-primary"
-                style={{ width: '100%', padding: '10px' }}
+                style={{ width: '100%', padding: '12px', fontSize: '14.5px' }}
               >
-                {isEnriching ? <Loader2 size={16} className="animate-spin" /> : <Search size={16} />}
+                {isEnriching ? <Loader2 size={18} className="animate-spin" /> : <Search size={18} />}
                 <span>{isEnriching ? 'Grounding via Google Search...' : 'Verify Enterprise Profile'}</span>
               </button>
             </form>
           </div>
 
           {/* Right Output */}
-          <div className="card-enterprise" style={{ padding: '26px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div className="card-enterprise" style={{ padding: '28px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: '800', color: 'var(--primary)' }}>
+              <h3 style={{ fontSize: '20px', fontWeight: '800', color: 'var(--primary)' }}>
                 {enrichResult.name}
               </h3>
-              <span className="badge badge-success" style={{ fontSize: '12px' }}>
+              <span className="badge badge-success" style={{ fontSize: '13px', padding: '5px 12px' }}>
                 ✓ 100% Grounded & Verified
               </span>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr', gap: '12px', fontSize: '14px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '150px 1fr', gap: '14px', fontSize: '14.5px' }}>
               <span style={{ color: 'var(--text-muted)' }}>Corporate Domain:</span>
-              <span style={{ fontWeight: '700', color: 'var(--primary)', fontFamily: 'var(--font-mono)' }}>{enrichResult.domain}</span>
+              <span style={{ fontWeight: '800', color: 'var(--primary)', fontFamily: 'var(--font-mono)' }}>{enrichResult.domain}</span>
 
               <span style={{ color: 'var(--text-muted)' }}>Industry Sector:</span>
-              <span style={{ fontWeight: '600' }}>{enrichResult.industry}</span>
+              <span style={{ fontWeight: '700' }}>{enrichResult.industry}</span>
 
               <span style={{ color: 'var(--text-muted)' }}>Scale:</span>
               <span>{enrichResult.size_range}</span>
@@ -597,20 +556,20 @@ export default function IntelligenceView({ onIngestionComplete }) {
               <span>{enrichResult.headquarters}</span>
 
               <span style={{ color: 'var(--text-muted)' }}>Overview:</span>
-              <span style={{ color: 'var(--text-main)', lineHeight: '1.6' }}>{enrichResult.description}</span>
+              <span style={{ color: 'var(--text-main)', lineHeight: '1.65' }}>{enrichResult.description}</span>
 
               <span style={{ color: 'var(--text-muted)' }}>Core Products:</span>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {enrichResult.key_products?.map((prod, i) => (
-                  <span key={i} className="badge badge-neutral" style={{ fontSize: '12px' }}>{prod}</span>
+                  <span key={i} className="badge badge-neutral" style={{ fontSize: '13px', padding: '4px 10px' }}>{prod}</span>
                 ))}
               </div>
 
               <span style={{ color: 'var(--text-muted)' }}>Google Citations:</span>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {enrichResult.sources?.map((s, i) => (
-                  <a key={i} href={s.url} target="_blank" rel="noreferrer" style={{ fontSize: '13px', color: 'var(--primary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <ExternalLink size={14} /> {s.title}
+                  <a key={i} href={s.url} target="_blank" rel="noreferrer" style={{ fontSize: '13.5px', color: 'var(--primary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <ExternalLink size={15} /> {s.title}
                   </a>
                 ))}
               </div>
@@ -621,52 +580,52 @@ export default function IntelligenceView({ onIngestionComplete }) {
 
       {/* TAB 3: GRAPH QUERY CONSOLE */}
       {activeSubTab === 'query_console' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div className="card-enterprise" style={{ padding: '20px 24px' }}>
-            <form onSubmit={handleExecuteQuery} style={{ display: 'flex', gap: '12px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
+          <div className="card-enterprise" style={{ padding: '22px 26px' }}>
+            <form onSubmit={handleExecuteQuery} style={{ display: 'flex', gap: '14px' }}>
               <input 
                 type="text"
                 placeholder="Ask complex topological questions (e.g. 'List all FinTech founders who attended AI Riser Demo Day')..."
                 value={queryInput}
                 onChange={(e) => setQueryInput(e.target.value)}
                 className="input-enterprise"
-                style={{ flex: 1 }}
+                style={{ flex: 1, height: '48px', fontSize: '15px' }}
               />
               <button 
                 type="submit" 
                 disabled={isQuerying}
                 className="btn btn-primary"
-                style={{ padding: '10px 24px' }}
+                style={{ padding: '12px 28px', fontSize: '15px' }}
               >
-                {isQuerying ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
+                {isQuerying ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
                 <span>Execute Query</span>
               </button>
             </form>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
             {queryHistory.map((item, idx) => (
-              <div key={idx} className="card-enterprise" style={{ padding: '22px 26px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div key={idx} className="card-enterprise" style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <Cpu size={18} color="var(--primary)" />
-                    <span style={{ fontSize: '15px', fontWeight: '800', color: 'var(--text-main)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <Cpu size={20} color="var(--primary)" />
+                    <span style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-main)' }}>
                       Query: "{item.query}"
                     </span>
                   </div>
-                  <span style={{ fontSize: '12px', color: 'var(--text-light)', fontFamily: 'var(--font-mono)' }}>
+                  <span style={{ fontSize: '13px', color: 'var(--text-light)', fontFamily: 'var(--font-mono)' }}>
                     {item.timestamp}
                   </span>
                 </div>
                 <div style={{ 
                   backgroundColor: 'var(--bg-main)', 
-                  padding: '16px 20px', 
-                  borderRadius: '10px', 
+                  padding: '18px 22px', 
+                  borderRadius: '12px', 
                   border: '1px solid var(--border-color)',
-                  fontSize: '14.5px',
+                  fontSize: '15px',
                   color: 'var(--text-main)',
                   whiteSpace: 'pre-line',
-                  lineHeight: '1.65'
+                  lineHeight: '1.7'
                 }}>
                   {item.answer}
                 </div>
