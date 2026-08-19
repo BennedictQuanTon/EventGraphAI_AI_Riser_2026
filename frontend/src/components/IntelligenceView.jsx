@@ -27,16 +27,16 @@ import {
 export default function IntelligenceView({ onIngestionComplete }) {
   const [activeSubTab, setActiveSubTab] = useState('batch_ocr');
 
-  // Realistic Business Card Upload Scans with Photorealistic Preview Assets
+  // Exactly 4 Unique Real Physical Business Cards Matching Photo Details 100%
   const [cards, setCards] = useState([
     {
       id: 1,
-      name: "Nguyễn Thanh Sơn",
-      title: "Director of Business Development",
-      company: "NextGen AI Vietnam",
-      email: "son.nguyen@nextgenai.vn",
-      phone: "+84 (0) 912 345 678",
-      address: "Floor 12, Keangnam Landmark 72, Hanoi",
+      name: "Tran Duc Anh",
+      title: "Executive Director",
+      company: "NextGen AI Solutions (Vietnam) Co., Ltd.",
+      email: "duc.anh@nextgenai.vn",
+      phone: "+84 901 234 567",
+      address: "Landmark 81, HCMC, Vietnam",
       domain: "nextgenai.vn",
       cardImage: "/assets/cards/card_nextgen.jpg",
       confidence: 100,
@@ -44,25 +44,25 @@ export default function IntelligenceView({ onIngestionComplete }) {
     },
     {
       id: 2,
-      name: "Trần Thị Mai Anh",
-      title: "Chief Executive Officer & Founder",
+      name: "Alex Carter",
+      title: "Co-Founder & CEO",
       company: "VinFintech Payments",
-      email: "maianh.tran@vinfinpay.com",
-      phone: "+84 (0) 988 123 456",
-      address: "The Loop Hub, District 1, Ho Chi Minh City",
-      domain: "vinfinpay.com",
+      email: "alex.carter@vinfintech.com",
+      phone: "+1 (212) 555-0199",
+      address: "150 Financial District, NYC 10005",
+      domain: "vinfintech.com",
       cardImage: "/assets/cards/card_vinfin.jpg",
       confidence: 98,
       status: "completed"
     },
     {
       id: 3,
-      name: "Alex Chen",
-      title: "General Partner & Founder",
+      name: "Alexander Chen",
+      title: "Partner | Founder",
       company: "Dragon Venture Capital",
       email: "alex.chen@dragonvc.co",
       phone: "+1 (650) 555-0188",
-      address: "Hai Chau Innovation Center, Danang",
+      address: "Silicon Valley / Danang Innovation Hub",
       domain: "dragonvc.co",
       cardImage: "/assets/cards/card_dragon.jpg",
       confidence: 96,
@@ -71,40 +71,14 @@ export default function IntelligenceView({ onIngestionComplete }) {
     {
       id: 4,
       name: "Sarah Jenkins",
-      title: "Managing Partner & SEA Lead",
+      title: "Managing Partner",
       company: "Nexus Ventures",
       email: "sarah@nexusventures.co",
       phone: "+1 (555) 123-4567",
-      address: "450 Tech Way, Singapore & SF",
+      address: "450 Tech Way, SF, CA",
       domain: "nexusventures.co",
       cardImage: "/assets/cards/card_nexus.jpg",
       confidence: 95,
-      status: "completed"
-    },
-    {
-      id: 5,
-      name: "Lê Hoàng Quân",
-      title: "Senior AI Research Lead",
-      company: "NextGen AI Vietnam",
-      email: "quan.le@nextgenai.vn",
-      phone: "+84 (0) 903 888 999",
-      address: "Keangnam Landmark 72, Hanoi",
-      domain: "nextgenai.vn",
-      cardImage: "/assets/cards/card_nextgen.jpg",
-      confidence: 92,
-      status: "linking"
-    },
-    {
-      id: 6,
-      name: "Vũ Đăng Khoa",
-      title: "Co-Founder & Chief Technology Officer",
-      company: "GreenFuture ESG Tech",
-      email: "khoa.vu@greenfuture.vn",
-      phone: "+84 (0) 977 445 566",
-      address: "Hoa Lac Hi-Tech Park, Hanoi",
-      domain: "greenfuture.vn",
-      cardImage: "/assets/cards/card_nexus.jpg",
-      confidence: 91,
       status: "completed"
     }
   ]);
@@ -134,12 +108,12 @@ export default function IntelligenceView({ onIngestionComplete }) {
   const [queryHistory, setQueryHistory] = useState([
     {
       query: "Identify high-priority venture investors connected to DeepTech and AI founders across 2025-2026 summits.",
-      answer: "Top Venture Capital Partners identified with verified Graph connections:\n1. **Pham Minh Duc & Alex Chen** (Managing Partners, Dragon Venture Capital)\n   • Connected to 4 AI Startups (NextGen AI, GreenFuture ESG, CyberGuard Security)\n   • Attended: AI Riser Demo Day 2026 (VIP Sponsor), Startup Summit 2025 (Speaker)\n2. **Sarah Jenkins** (Managing Partner, Nexus Ventures Singapore)\n   • Cross-border SEA Tech syndicate focus\n   • Direct co-investment relationship with National Innovation Hub.\n*All entities are canonical and anti-hallucination verified against the Knowledge Graph.*",
+      answer: "Top Venture Capital Partners identified with verified Graph connections:\n1. **Alexander Chen** (Partner | Founder, Dragon Venture Capital)\n   • Connected to 4 AI Startups (NextGen AI, GreenFuture ESG, CyberGuard Security)\n   • Attended: AI Riser Demo Day 2026 (VIP Sponsor), Startup Summit 2025 (Speaker)\n2. **Sarah Jenkins** (Managing Partner, Nexus Ventures)\n   • Cross-border SEA Tech syndicate focus\n   • Direct co-investment relationship with National Innovation Hub.\n*All entities are canonical and anti-hallucination verified against the Knowledge Graph.*",
       timestamp: "2m ago"
     },
     {
       query: "Which executives participated in multiple cross-city events between Hanoi and Ho Chi Minh City?",
-      answer: "Found **3 high-mobility executive nodes**:\n• **Nguyen Thanh Son** (NextGen AI): AI Riser Demo Day (Hanoi), Tech Networking Night (HCMC).\n• **Tran Thi Mai Anh** (VinFintech Payments): Vietnam FinTech Expo (HCMC), AI Riser Demo Day (Hanoi).\n• **Do Thu Trang** (Innovation Hub Lead): Active across Hanoi, HCMC, and Danang summits as Co-organizer.",
+      answer: "Found **3 high-mobility executive nodes**:\n• **Tran Duc Anh** (NextGen AI Solutions): AI Riser Demo Day (Hanoi), Tech Networking Night (HCMC).\n• **Alex Carter** (VinFintech Payments): Vietnam FinTech Expo (HCMC), AI Riser Demo Day (Hanoi).\n• **Do Thu Trang** (Innovation Hub Lead): Active across Hanoi, HCMC, and Danang summits as Co-organizer.",
       timestamp: "18m ago"
     }
   ]);
@@ -152,15 +126,15 @@ export default function IntelligenceView({ onIngestionComplete }) {
     setTimeout(() => {
       const newCard = {
         id: Date.now(),
-        name: "Hoàng Minh Tú",
-        title: "Founder & Chief Architect",
-        company: "Skyline AI Analytics",
-        email: "tu.hoang@skyline.ai",
-        phone: "+84 (0) 988 776 655",
-        address: "Lang Ha, Ba Dinh, Hanoi",
-        domain: "skyline.ai",
+        name: "Tran Duc Anh",
+        title: "Executive Director",
+        company: "NextGen AI Solutions (Vietnam) Co., Ltd.",
+        email: "duc.anh@nextgenai.vn",
+        phone: "+84 901 234 567",
+        address: "Landmark 81, HCMC, Vietnam",
+        domain: "nextgenai.vn",
         cardImage: URL.createObjectURL(files[0]),
-        confidence: 97,
+        confidence: 100,
         status: "completed"
       };
       setCards(prev => [newCard, ...prev]);
@@ -377,7 +351,7 @@ export default function IntelligenceView({ onIngestionComplete }) {
                   <span style={{ color: 'var(--success)' }}>Completed: {cards.filter(c => c.status === 'completed').length} verified</span>
                 </div>
                 <div style={{ width: '100%', height: '8px', backgroundColor: 'var(--border-color)', borderRadius: '9999px', overflow: 'hidden' }}>
-                  <div style={{ width: '85%', height: '100%', backgroundColor: 'var(--primary)' }} />
+                  <div style={{ width: '100%', height: '100%', backgroundColor: 'var(--primary)' }} />
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13.5px', color: 'var(--secondary)', fontWeight: '700' }}>
                   <Sparkles size={16} />
@@ -386,7 +360,7 @@ export default function IntelligenceView({ onIngestionComplete }) {
               </div>
             </div>
 
-            {/* Right Column: 6 Physical Business Card Photos Grid */}
+            {/* Right Column: 4 Physical Business Card Photos Grid */}
             <div className="card-enterprise" style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
@@ -402,7 +376,7 @@ export default function IntelligenceView({ onIngestionComplete }) {
                 </span>
               </div>
 
-              {/* Grid of Real Business Card Photograph Previews */}
+              {/* Grid of Real Business Card Photograph Previews (Matching Photo 100%) */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '22px' }}>
                 {cards.map((card) => (
                   <div 
@@ -419,7 +393,7 @@ export default function IntelligenceView({ onIngestionComplete }) {
                     }}
                   >
                     {/* Realistic Photo Header */}
-                    <div style={{ height: '165px', width: '100%', position: 'relative', overflow: 'hidden', backgroundColor: '#0F172A' }}>
+                    <div style={{ height: '185px', width: '100%', position: 'relative', overflow: 'hidden', backgroundColor: '#0F172A' }}>
                       <img 
                         src={card.cardImage} 
                         alt="Physical Name Card Photo"
@@ -431,16 +405,11 @@ export default function IntelligenceView({ onIngestionComplete }) {
                             <CheckCircle2 size={13} /> {card.confidence}% OCR
                           </span>
                         )}
-                        {card.status === 'linking' && (
-                          <span className="badge badge-secondary" style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)', fontSize: '12px' }}>
-                            <Sparkles size={13} /> Linking Graph
-                          </span>
-                        )}
                       </div>
                     </div>
 
-                    {/* Extracted Structured Card Metadata */}
-                    <div style={{ padding: '16px 20px 20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    {/* Extracted Structured Card Metadata (Exact Match With Image) */}
+                    <div style={{ padding: '18px 20px 22px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                       <div>
                         <div style={{ fontSize: '18px', fontWeight: '800', color: 'var(--text-main)', letterSpacing: '-0.01em' }}>
                           {card.name}
@@ -454,7 +423,7 @@ export default function IntelligenceView({ onIngestionComplete }) {
                       </div>
 
                       {/* Contact Fields with Icons */}
-                      <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px' }}>
+                      <div style={{ marginTop: '12px', paddingTop: '10px', borderTop: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-main)' }}>
                           <Mail size={14} color="var(--primary)" />
                           <span style={{ fontFamily: 'var(--font-mono)', fontWeight: '600' }}>{card.email}</span>
@@ -555,7 +524,6 @@ export default function IntelligenceView({ onIngestionComplete }) {
               <span style={{ color: 'var(--text-muted)' }}>Headquarters:</span>
               <span>{enrichResult.headquarters}</span>
 
-              <span style={{ color: 'var(--text-muted)' }}>Overview:</span>
               <span style={{ color: 'var(--text-main)', lineHeight: '1.65' }}>{enrichResult.description}</span>
 
               <span style={{ color: 'var(--text-muted)' }}>Core Products:</span>
