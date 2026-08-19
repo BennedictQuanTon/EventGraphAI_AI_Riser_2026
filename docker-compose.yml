@@ -1,0 +1,14 @@
+services:
+  eventgraph-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: eventgraph-ai
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GEMINI_MODEL=gemini-2.0-flash
+      - DATABASE_URL=sqlite:///./eventgraph.db
+    restart: unless-stopped
