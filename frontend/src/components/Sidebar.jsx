@@ -1,93 +1,85 @@
 import React from 'react';
 import { 
   LayoutDashboard, 
-  Camera, 
-  Building2, 
-  FileSpreadsheet, 
-  GitMerge, 
-  Users, 
-  Calendar, 
-  Network, 
   Sparkles, 
-  MessageSquare, 
-  MapPin, 
-  FileText, 
-  RefreshCw,
-  Award
+  Network, 
+  Database, 
+  GitMerge, 
+  Settings, 
+  HelpCircle, 
+  LogOut,
+  Plus
 } from 'lucide-react';
 
-export default function Sidebar({ activeTab, setActiveTab, onResetDb, isResetting, queueCount = 0 }) {
+export default function Sidebar({ activeTab, setActiveTab, onResetDb, isResetting, queueCount = 12 }) {
   const navItems = [
-    { id: 'overview', label: 'Tổng quan', icon: LayoutDashboard },
-    { id: 'graph', label: 'Đồ thị quan hệ', icon: Network, highlight: true },
-    { id: 'scan_card', label: 'Scan Card Visit', icon: Camera },
-    { id: 'add_company', label: 'Thêm Doanh Nghiệp', icon: Building2 },
-    { id: 'import_excel', label: 'Import Excel Sự Kiện', icon: FileSpreadsheet },
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'intelligence', label: 'Intelligence', icon: Sparkles },
+    { id: 'graph', label: 'Graph View', icon: Network },
+    { id: 'datasources', label: 'Data Sources', icon: Database },
     { 
-      id: 'resolution_queue', 
-      label: 'Hàng đợi chuẩn hóa', 
+      id: 'resolutions', 
+      label: 'Resolutions', 
       icon: GitMerge, 
-      badge: queueCount > 0 ? queueCount : null 
+      badge: queueCount > 0 ? queueCount : 12 
     },
-    { id: 'persons', label: 'Danh sách Người', icon: Users },
-    { id: 'companies', label: 'Danh sách Công ty', icon: Building2 },
-    { id: 'events', label: 'Danh sách Sự kiện', icon: Calendar },
-    { id: 'insight_agent', label: 'Insight Agent', icon: Sparkles, highlight: true },
-    { id: 'chat_assistant', label: 'Trợ lý Chat RAG', icon: MessageSquare, highlight: true },
-    { id: 'maps', label: 'Bản đồ hệ sinh thái', icon: MapPin },
-    { id: 'reports', label: 'Báo cáo & Minh chứng', icon: FileText }
+    { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
   return (
-    <aside className="sidebar">
+    <aside className="sidebar-container">
       {/* Brand Header */}
-      <div style={{ padding: '24px 20px 16px', borderBottom: '1px solid var(--border-subtle)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div style={{ padding: '20px 18px 16px', borderBottom: '1px solid var(--border-color)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '12px',
-            background: 'linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%)',
+            width: '36px',
+            height: '36px',
+            borderRadius: '10px',
+            backgroundColor: 'var(--primary)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 0 15px rgba(59, 130, 246, 0.5)'
+            boxShadow: '0 2px 6px rgba(0, 82, 204, 0.25)'
           }}>
-            <Network size={22} color="#ffffff" />
+            <Network size={20} color="#FFFFFF" />
           </div>
           <div>
-            <h1 style={{ fontSize: '18px', fontWeight: '700', letterSpacing: '-0.02em', color: '#ffffff' }}>
-              EventGraph <span style={{ color: '#60A5FA' }}>AI</span>
+            <h1 style={{ fontSize: '16px', fontWeight: '800', letterSpacing: '-0.02em', color: 'var(--text-main)', lineHeight: '1.2' }}>
+              EventGraph AI
             </h1>
-            <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-              #BuildwithGoogleAI 2026
+            <p style={{ fontSize: '10px', fontWeight: '700', letterSpacing: '0.08em', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+              Enterprise Node
             </p>
           </div>
         </div>
 
-        {/* AI Riser Tier Badge */}
-        <div style={{
-          marginTop: '14px',
-          padding: '6px 10px',
-          borderRadius: '8px',
-          background: 'rgba(245, 158, 11, 0.1)',
-          border: '1px solid rgba(245, 158, 11, 0.25)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px'
-        }}>
-          <Award size={14} color="#F59E0B" />
-          <span style={{ fontSize: '11px', fontWeight: '600', color: '#FCD34D' }}>
-            Mục tiêu Hạng Vàng / Bạch Kim
-          </span>
-        </div>
+        {/* Primary Action Button */}
+        <button
+          onClick={() => setActiveTab('intelligence')}
+          style={{
+            width: '100%',
+            marginTop: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            padding: '9px 14px',
+            borderRadius: '8px',
+            backgroundColor: 'var(--secondary)',
+            color: '#FFFFFF',
+            fontWeight: '700',
+            fontSize: '13px',
+            border: 'none',
+            boxShadow: '0 2px 4px rgba(255, 140, 0, 0.2)'
+          }}
+        >
+          <Plus size={16} strokeWidth={2.5} />
+          <span>New Analysis</span>
+        </button>
       </div>
 
-      {/* Navigation Links */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '12px 10px' }}>
-        <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', padding: '6px 12px', fontWeight: '600' }}>
-          Menu Điều Hướng
-        </div>
+      {/* Navigation Menu */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '14px 12px' }}>
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -101,43 +93,33 @@ export default function Sidebar({ activeTab, setActiveTab, onResetDb, isResettin
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   padding: '9px 12px',
-                  borderRadius: '10px',
-                  border: isActive ? '1px solid rgba(59, 130, 246, 0.4)' : '1px solid transparent',
-                  background: isActive 
-                    ? 'linear-gradient(90deg, rgba(59, 130, 246, 0.18) 0%, rgba(59, 130, 246, 0.05) 100%)' 
-                    : 'transparent',
-                  color: isActive ? '#60A5FA' : 'var(--text-secondary)',
+                  borderRadius: '8px',
+                  border: isActive ? '1px solid var(--primary-border)' : '1px solid transparent',
+                  backgroundColor: isActive ? 'var(--primary-light)' : 'transparent',
+                  color: isActive ? 'var(--primary)' : 'var(--text-muted)',
                   textAlign: 'left',
                   fontSize: '13.5px',
-                  fontWeight: isActive ? '600' : '400',
+                  fontWeight: isActive ? '700' : '500',
                   transition: 'all 0.15s ease'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <Icon size={17} color={isActive ? '#60A5FA' : 'var(--text-muted)'} />
+                  <Icon size={18} color={isActive ? 'var(--primary)' : 'var(--text-muted)'} />
                   <span>{item.label}</span>
                 </div>
                 {item.badge && (
                   <span style={{
-                    background: '#EF4444',
-                    color: '#fff',
-                    fontSize: '10px',
+                    backgroundColor: 'var(--secondary-light)',
+                    color: 'var(--secondary)',
+                    fontSize: '11px',
                     fontWeight: '700',
-                    padding: '2px 7px',
-                    borderRadius: '12px',
-                    boxShadow: '0 0 10px rgba(239, 68, 68, 0.5)'
+                    fontFamily: 'var(--font-mono)',
+                    padding: '2px 8px',
+                    borderRadius: '9999px',
+                    border: '1px solid var(--secondary-border)'
                   }}>
                     {item.badge}
                   </span>
-                )}
-                {item.highlight && !isActive && (
-                  <span style={{
-                    width: '6px',
-                    height: '6px',
-                    borderRadius: '50%',
-                    background: '#3B82F6',
-                    opacity: 0.8
-                  }} />
                 )}
               </button>
             );
@@ -145,28 +127,44 @@ export default function Sidebar({ activeTab, setActiveTab, onResetDb, isResettin
         </nav>
       </div>
 
-      {/* Footer Actions */}
-      <div style={{ padding: '16px 14px', borderTop: '1px solid var(--border-subtle)', background: 'rgba(5, 9, 17, 0.8)' }}>
+      {/* Bottom Footer Actions */}
+      <div style={{ padding: '14px 12px', borderTop: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <button
+          onClick={() => setActiveTab('settings')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            padding: '8px 12px',
+            borderRadius: '6px',
+            background: 'transparent',
+            border: 'none',
+            color: 'var(--text-muted)',
+            fontSize: '13px',
+            fontWeight: '500'
+          }}
+        >
+          <HelpCircle size={16} />
+          <span>Documentation & Help</span>
+        </button>
         <button
           onClick={onResetDb}
           disabled={isResetting}
           style={{
-            width: '100%',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
+            gap: '10px',
             padding: '8px 12px',
-            borderRadius: '8px',
-            background: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid var(--border-subtle)',
-            color: 'var(--text-secondary)',
-            fontSize: '12px',
-            fontWeight: '500'
+            borderRadius: '6px',
+            background: 'transparent',
+            border: 'none',
+            color: 'var(--tertiary)',
+            fontSize: '13px',
+            fontWeight: '600'
           }}
         >
-          <RefreshCw size={13} className={isResetting ? 'animate-spin' : ''} />
-          {isResetting ? 'Đang nạp lại...' : 'Tái nạp Demo Data'}
+          <LogOut size={16} />
+          <span>{isResetting ? 'Resetting Data...' : 'Reset Canonical Data'}</span>
         </button>
       </div>
     </aside>

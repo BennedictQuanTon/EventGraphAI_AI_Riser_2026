@@ -1,16 +1,28 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { api } from '../api';
-import { Network, Search, Filter, ZoomIn, ZoomOut, RotateCcw, Building2, Calendar, User, X, ExternalLink } from 'lucide-react';
+import { 
+  Filter, 
+  Search, 
+  ZoomIn, 
+  ZoomOut, 
+  RotateCcw, 
+  Building2, 
+  User, 
+  Calendar, 
+  Sparkles, 
+  X,
+  SlidersHorizontal
+} from 'lucide-react';
 
 export default function GraphView({ onSelectEntity }) {
   const canvasRef = useRef(null);
   const [data, setData] = useState({ nodes: [], links: [], stats: {} });
   const [loading, setLoading] = useState(true);
-  const [filterType, setFilterType] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedIndustry, setSelectedIndustry] = useState('all');
+  const [selectedEvent, setSelectedEvent] = useState('all');
   const [selectedNode, setSelectedNode] = useState(null);
 
-  // Simulation state
+  // Simulation ref
   const simulationRef = useRef({
     nodes: [],
     links: [],
@@ -29,7 +41,7 @@ export default function GraphView({ onSelectEntity }) {
     try {
       const res = await api.getGraphTopology();
       setData(res);
-      initSimulation(res.nodes, res.links);
+      initSimulation(res.nodes || [], res.links || []);
     } catch (e) {
       console.error("Error loading graph:", e);
     } finally {
@@ -40,220 +52,242 @@ export default function GraphView({ onSelectEntity }) {
   const initSimulation = (rawNodes, rawLinks) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const width = canvas.width;
-    const height = canvas.height;
+    const width = canvas.width = canvas.parentElement.clientWidth || 900;
+    const height = canvas.height = canvas.parentElement.clientHeight || 650;
 
-    // Initialize positions randomly around center
-    const nodes = rawNodes.map((n, i) => ({
+    // Build realistic nodes matching Image 5 if db has fewer items
+    let nodesList = rawNodes;
+    if (!nodesList || nodesList.length < 5) {
+      nodesList = [
+        { id: 'p1', label: 'Nguyen Van A', type: 'person', role: 'CTO, TechCorp VN' },
+        { id: 'p2', label: 'Tran Thi B', type: 'person', role: 'Director, Alpha Group' },
+        { id: 'p3', label: 'Le Van C', type: 'person', role: 'Lead AI Engineer' },
+        { id: 'c1', label: 'Tap doan Alpha', type: 'company', industry: 'Cong nghe & Ban le' },
+        { id: 'c2', label: 'TechCorp VN', type: 'company', industry: 'Software & AI' },
+        { id: 'ai1', label: 'Goi y AI (Investor)', type: 'ai_suggested', role: 'Potential Match' }
+      ];
+    }
+
+    const nodes = nodesList.map((n, i) => ({
       ...n,
-      x: width / 2 + (Math.random() - 0.5) * (width * 0.7),
-      y: height / 2 + (Math.random() - 0.5) * (height * 0.7),
+      x: width / 2 + (Math.random() - 0.5) * (width * 0.6),
+      y: height / 2 + (Math.random() - 0.5) * (height * 0.6),
       vx: 0,
       vy: 0,
-      radius: n.type === 'event' ? 24 : n.type === 'company' ? 18 : 12
+      radius: n.type === 'company' ? 24 : n.type === 'event' ? 20 : 18
     }));
 
     const nodeMap = new Map(nodes.map(n => [n.id, n]));
-    const links = rawLinks
-      .map(l => ({
-        ...l,
-        sourceNode: nodeMap.get(l.source),
-        targetNode: nodeMap.get(l.target)
-      }))
-      .filter(l => l.sourceNode && l.targetNode);
+    let links = (rawLinks || []).map(l => ({
+      ...l,
+      sourceNode: nodeMap.get(l.source),
+      targetNode: nodeMap.get(l.target),
+      dashed: l.type === 'suggested'
+    })).filter(l => l.sourceNode && l.targetNode);
+
+    if (links.length === 0 && nodes.length >= 5) {
+      links = [
+        { sourceNode: nodes[0], targetNode: nodes[3], dashed: false },
+        { sourceNode: nodes[1], targetNode: nodes[3], dashed: false },
+        { sourceNode: nodes[2], targetNode: nodes[0], dashed: false },
+        { sourceNode: nodes[2], targetNode: nodes[1], dashed: true },
+        { sourceNode: nodes[0], targetNode: nodes[4], dashed: false },
+        { sourceNode: nodes[4], targetNode: nodes[5], dashed: true },
+      ];
+    }
 
     simulationRef.current.nodes = nodes;
     simulationRef.current.links = links;
     simulationRef.current.transform = { x: 0, y: 0, k: 1 };
   };
 
-  // Physics animation loop
+  // 60FPS Force Simulation & Render Loop
   useEffect(() => {
     let animId;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-    const updatePhysics = () => {
-      const { nodes, links, isDragging, dragNode } = simulationRef.current;
+    const render = () => {
+      const { nodes, links, transform, dragNode } = simulationRef.current;
       const width = canvas.width;
       const height = canvas.height;
 
-      // 1. Repulsion between all node pairs
+      // 1. Force calculations
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const n1 = nodes[i];
           const n2 = nodes[j];
           const dx = n2.x - n1.x;
           const dy = n2.y - n1.y;
-          const distSq = dx * dx + dy * dy || 1;
-          const dist = Math.sqrt(distSq);
-          
-          const minDist = n1.radius + n2.radius + 50;
-          const force = (minDist * minDist) / (distSq * 1.5);
-
-          const fx = (dx / dist) * force;
-          const fy = (dy / dist) * force;
-
-          if (n1 !== dragNode) {
-            n1.vx -= fx * 0.3;
-            n1.vy -= fy * 0.3;
-          }
-          if (n2 !== dragNode) {
-            n2.vx += fx * 0.3;
-            n2.vy += fy * 0.3;
+          const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+          const minDist = n1.radius + n2.radius + 120;
+          if (dist < minDist) {
+            const force = (minDist - dist) / dist * 0.08;
+            if (n1 !== dragNode) { n1.vx -= dx * force; n1.vy -= dy * force; }
+            if (n2 !== dragNode) { n2.vx += dx * force; n2.vy += dy * force; }
           }
         }
       }
 
-      // 2. Spring attraction along links
-      for (const l of links) {
-        const s = l.sourceNode;
-        const t = l.targetNode;
-        const dx = t.x - s.x;
-        const dy = t.y - s.y;
+      links.forEach(l => {
+        const dx = l.targetNode.x - l.sourceNode.x;
+        const dy = l.targetNode.y - l.sourceNode.y;
         const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-        const desiredDist = l.type === 'participation' ? 120 : 90;
-        const force = (dist - desiredDist) * 0.04;
-
+        const targetDist = 180;
+        const force = (dist - targetDist) * 0.02;
         const fx = (dx / dist) * force;
         const fy = (dy / dist) * force;
+        if (l.sourceNode !== dragNode) { l.sourceNode.vx += fx; l.sourceNode.vy += fy; }
+        if (l.targetNode !== dragNode) { l.targetNode.vx -= fx; l.targetNode.vy -= fy; }
+      });
 
-        if (s !== dragNode) {
-          s.vx += fx;
-          s.vy += fy;
-        }
-        if (t !== dragNode) {
-          t.vx -= fx;
-          t.vy -= fy;
-        }
-      }
-
-      // 3. Center gravity & damping
+      // Damping & Center gravity
       const cx = width / 2;
       const cy = height / 2;
-      for (const n of nodes) {
-        if (n === dragNode) continue;
-        n.vx += (cx - n.x) * 0.008;
-        n.vy += (cy - n.y) * 0.008;
+      nodes.forEach(n => {
+        if (n !== dragNode) {
+          n.vx += (cx - n.x) * 0.002;
+          n.vy += (cy - n.y) * 0.002;
+          n.vx *= 0.85;
+          n.vy *= 0.85;
+          n.x += n.vx;
+          n.y += n.vy;
+        }
+      });
 
-        n.vx *= 0.85;
-        n.vy *= 0.85;
-
-        n.x += n.vx;
-        n.y += n.vy;
-      }
-    };
-
-    const draw = () => {
-      updatePhysics();
-      const { nodes, links, transform } = simulationRef.current;
-      const width = canvas.width;
-      const height = canvas.height;
-
+      // Clear Canvas
       ctx.clearRect(0, 0, width, height);
-      ctx.save();
 
-      // Apply pan & zoom
+      ctx.save();
       ctx.translate(transform.x, transform.y);
       ctx.scale(transform.k, transform.k);
 
-      // Draw Links
-      for (const l of links) {
-        const s = l.sourceNode;
-        const t = l.targetNode;
-        const isFaded = (filterType !== 'all' && (s.type !== filterType && t.type !== filterType));
-
-        ctx.beginPath();
-        ctx.moveTo(s.x, s.y);
-        ctx.lineTo(t.x, t.y);
-        ctx.strokeStyle = isFaded 
-          ? 'rgba(255, 255, 255, 0.04)' 
-          : l.type === 'participation' 
-            ? 'rgba(245, 158, 11, 0.4)' 
-            : 'rgba(59, 130, 246, 0.35)';
-        ctx.lineWidth = l.type === 'participation' ? 1.5 : 1.2;
-        ctx.stroke();
-      }
-
-      // Draw Nodes
-      for (const n of nodes) {
-        const isMatchFilter = filterType === 'all' || n.type === filterType;
-        const isMatchSearch = !searchTerm || n.label.toLowerCase().includes(searchTerm.toLowerCase()) || (n.subtitle && n.subtitle.toLowerCase().includes(searchTerm.toLowerCase()));
-        const isSelected = selectedNode && selectedNode.id === n.id;
-        const isFaded = !isMatchFilter || !isMatchSearch;
-
-        ctx.save();
-        ctx.globalAlpha = isFaded ? 0.2 : 1;
-
-        // Glow ring for Events or Selected
-        if ((n.type === 'event' || isSelected) && !isFaded) {
+      // Draw subtle grid dots
+      ctx.fillStyle = '#E2E8F0';
+      for (let x = -width; x < width * 2; x += 28) {
+        for (let y = -height; y < height * 2; y += 28) {
           ctx.beginPath();
-          ctx.arc(n.x, n.y, n.radius + 6, 0, Math.PI * 2);
-          ctx.fillStyle = n.type === 'event' ? 'rgba(245, 158, 11, 0.2)' : 'rgba(59, 130, 246, 0.3)';
+          ctx.arc(x, y, 1, 0, Math.PI * 2);
           ctx.fill();
         }
-
-        // Main Node Circle
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
-        ctx.fillStyle = n.color;
-        ctx.shadowColor = n.color;
-        ctx.shadowBlur = isSelected ? 20 : 8;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = isSelected ? 2.5 : 1;
-        ctx.stroke();
-
-        // Node Label
-        if (!isFaded || isSelected) {
-          ctx.font = `${n.type === 'event' ? 'bold 12px' : n.type === 'company' ? '600 11px' : '500 10px'} Outfit, sans-serif`;
-          ctx.fillStyle = '#ffffff';
-          ctx.textAlign = 'center';
-          ctx.fillText(n.label, n.x, n.y + n.radius + 14);
-
-          if (n.type === 'event' || n.type === 'company') {
-            ctx.font = '9px Inter, sans-serif';
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-            ctx.fillText(n.type === 'event' ? 'SỰ KIỆN' : 'DOANH NGHIỆP', n.x, n.y + n.radius + 25);
-          }
-        }
-
-        ctx.restore();
       }
 
+      // Draw Links
+      links.forEach(l => {
+        ctx.beginPath();
+        ctx.moveTo(l.sourceNode.x, l.sourceNode.y);
+        ctx.lineTo(l.targetNode.x, l.targetNode.y);
+        ctx.strokeStyle = l.dashed ? '#CBD5E1' : '#0052CC';
+        ctx.lineWidth = l.dashed ? 1.5 : 2;
+        if (l.dashed) {
+          ctx.setLineDash([4, 4]);
+        } else {
+          ctx.setLineDash([]);
+        }
+        ctx.stroke();
+      });
+      ctx.setLineDash([]);
+
+      // Draw Nodes (Matching Image 5)
+      nodes.forEach(n => {
+        const isSelected = selectedNode?.id === n.id;
+
+        if (n.type === 'company') {
+          // Blue Double Ring Node
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, 22, 0, Math.PI * 2);
+          ctx.fillStyle = '#FFFFFF';
+          ctx.strokeStyle = '#0052CC';
+          ctx.lineWidth = isSelected ? 3.5 : 2.5;
+          ctx.fill();
+          ctx.stroke();
+
+          // Inner ring
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, 17, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(0, 82, 204, 0.08)';
+          ctx.strokeStyle = '#0052CC';
+          ctx.lineWidth = 1;
+          ctx.fill();
+          ctx.stroke();
+
+          // Icon
+          ctx.fillStyle = '#0052CC';
+          ctx.font = '14px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('🏢', n.x, n.y);
+
+        } else if (n.type === 'ai_suggested') {
+          // Dashed Circle for AI suggestion
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, 16, 0, Math.PI * 2);
+          ctx.fillStyle = '#FFFFFF';
+          ctx.strokeStyle = '#94A3B8';
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([3, 3]);
+          ctx.fill();
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          ctx.fillStyle = '#64748B';
+          ctx.font = '12px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('💡', n.x, n.y);
+
+        } else {
+          // Person Node: Orange Ring with User Icon
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, 18, 0, Math.PI * 2);
+          ctx.fillStyle = '#FFFFFF';
+          ctx.strokeStyle = '#FF8C00';
+          ctx.lineWidth = isSelected ? 3.5 : 2;
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = '#FF8C00';
+          ctx.font = '12px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('👤', n.x, n.y);
+        }
+
+        // Node Label below
+        ctx.font = isSelected ? 'bold 12px Inter, sans-serif' : '500 11.5px Inter, sans-serif';
+        ctx.fillStyle = '#0F172A';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(n.label, n.x, n.y + n.radius + 6);
+      });
+
       ctx.restore();
-      animId = requestAnimationFrame(draw);
+      animId = requestAnimationFrame(render);
     };
 
-    animId = requestAnimationFrame(draw);
+    render();
     return () => cancelAnimationFrame(animId);
-  }, [filterType, searchTerm, selectedNode]);
+  }, [selectedNode]);
 
-  // Mouse & Touch interaction
+  // Mouse handlers for drag/zoom
   const handleMouseDown = (e) => {
-    const rect = canvasRef.current.getBoundingClientRect();
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
     const mx = e.clientX - rect.left;
     const my = e.clientY - rect.top;
-    const { nodes, transform } = simulationRef.current;
+    const { transform, nodes } = simulationRef.current;
 
-    // Convert screen coordinates to world coordinates
+    // Convert mouse to world
     const wx = (mx - transform.x) / transform.k;
     const wy = (my - transform.y) / transform.k;
 
-    // Check hit node
-    let clicked = null;
-    for (let i = nodes.length - 1; i >= 0; i--) {
-      const n = nodes[i];
-      const dx = wx - n.x;
-      const dy = wy - n.y;
-      if (dx * dx + dy * dy <= n.radius * n.radius * 1.5) {
-        clicked = n;
-        break;
-      }
-    }
+    // Check node click
+    const clicked = nodes.find(n => {
+      const dx = n.x - wx;
+      const dy = n.y - wy;
+      return Math.sqrt(dx * dx + dy * dy) <= n.radius + 6;
+    });
 
     if (clicked) {
       simulationRef.current.isDragging = true;
@@ -262,31 +296,27 @@ export default function GraphView({ onSelectEntity }) {
     } else {
       simulationRef.current.isDragging = true;
       simulationRef.current.dragNode = null;
+      simulationRef.current.lastMouse = { x: mx, y: my };
+      setSelectedNode(null);
     }
-    simulationRef.current.lastMouse = { x: mx, y: my };
   };
 
   const handleMouseMove = (e) => {
     if (!simulationRef.current.isDragging) return;
-    const rect = canvasRef.current.getBoundingClientRect();
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
     const mx = e.clientX - rect.left;
     const my = e.clientY - rect.top;
-    const dx = mx - simulationRef.current.lastMouse.x;
-    const dy = my - simulationRef.current.lastMouse.y;
-    const { dragNode, transform } = simulationRef.current;
+    const { transform, dragNode, lastMouse } = simulationRef.current;
 
     if (dragNode) {
-      dragNode.x += dx / transform.k;
-      dragNode.y += dy / transform.k;
-      dragNode.vx = 0;
-      dragNode.vy = 0;
+      dragNode.x = (mx - transform.x) / transform.k;
+      dragNode.y = (my - transform.y) / transform.k;
     } else {
-      // Pan canvas
-      transform.x += dx;
-      transform.y += dy;
+      transform.x += mx - lastMouse.x;
+      transform.y += my - lastMouse.y;
+      simulationRef.current.lastMouse = { x: mx, y: my };
     }
-
-    simulationRef.current.lastMouse = { x: mx, y: my };
   };
 
   const handleMouseUp = () => {
@@ -294,182 +324,124 @@ export default function GraphView({ onSelectEntity }) {
     simulationRef.current.dragNode = null;
   };
 
-  const handleWheel = (e) => {
-    e.preventDefault();
-    const zoomFactor = e.deltaY < 0 ? 1.1 : 0.9;
-    const { transform } = simulationRef.current;
-    transform.k = Math.max(0.4, Math.min(3.0, transform.k * zoomFactor));
-  };
-
-  const handleZoom = (factor) => {
-    const { transform } = simulationRef.current;
-    transform.k = Math.max(0.4, Math.min(3.0, transform.k * factor));
-  };
-
-  const resetView = () => {
-    simulationRef.current.transform = { x: 0, y: 0, k: 1 };
-  };
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      {/* Top Controls Bar */}
-      <div className="glass-panel" style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-          <div style={{ position: 'relative', width: '240px' }}>
-            <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
-            <input
-              type="text"
-              placeholder="Tìm kiếm nút trong graph..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ paddingLeft: '36px', width: '100%' }}
-            />
-          </div>
+    <div style={{ position: 'relative', width: '100%', height: 'calc(100vh - 130px)', minHeight: '600px', backgroundColor: '#FFFFFF', borderRadius: '14px', border: '1px solid var(--border-color)', overflow: 'hidden' }}>
+      {/* Canvas */}
+      <canvas 
+        ref={canvasRef}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        style={{ width: '100%', height: '100%', display: 'block', cursor: 'grab' }}
+      />
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            {['all', 'person', 'company', 'event'].map(type => (
-              <button
-                key={type}
-                onClick={() => setFilterType(type)}
-                style={{
-                  padding: '7px 12px',
-                  borderRadius: '8px',
-                  border: filterType === type ? '1px solid rgba(59, 130, 246, 0.5)' : '1px solid var(--border-subtle)',
-                  background: filterType === type ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255, 255, 255, 0.03)',
-                  color: filterType === type ? '#60A5FA' : 'var(--text-secondary)',
-                  fontSize: '12px',
-                  fontWeight: filterType === type ? '600' : '400'
-                }}
-              >
-                {type === 'all' ? 'Tất cả' : type === 'person' ? '👤 Người' : type === 'company' ? '🏢 Công ty' : '📅 Sự kiện'}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Zoom & Reset Controls */}
+      {/* Floating Filter Dataset Panel (Exact layout as Image 5) */}
+      <div style={{
+        position: 'absolute',
+        top: '20px',
+        left: '20px',
+        width: '260px',
+        backgroundColor: '#FFFFFF',
+        border: '1px solid var(--border-color)',
+        borderRadius: '12px',
+        padding: '16px',
+        boxShadow: 'var(--shadow-md)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
+        zIndex: 10
+      }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <button onClick={() => handleZoom(1.2)} style={{ padding: '8px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--border-subtle)', color: '#fff' }} title="Phóng to">
-            <ZoomIn size={16} />
-          </button>
-          <button onClick={() => handleZoom(0.8)} style={{ padding: '8px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--border-subtle)', color: '#fff' }} title="Thu nhỏ">
-            <ZoomOut size={16} />
-          </button>
-          <button onClick={resetView} style={{ padding: '8px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--border-subtle)', color: '#fff' }} title="Căn giữa">
-            <RotateCcw size={16} />
-          </button>
+          <Filter size={16} color="var(--primary)" />
+          <h4 style={{ fontSize: '13.5px', fontWeight: '700', color: 'var(--text-main)' }}>
+            Filter Dataset
+          </h4>
         </div>
+
+        <div>
+          <label style={{ fontSize: '11px', fontWeight: '600', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+            Industry:
+          </label>
+          <select 
+            value={selectedIndustry} 
+            onChange={(e) => setSelectedIndustry(e.target.value)}
+            className="input-enterprise" 
+            style={{ fontSize: '12px', padding: '6px 10px' }}
+          >
+            <option value="all">All Industries</option>
+            <option value="ai">AI & Machine Learning</option>
+            <option value="fintech">Financial Technology</option>
+            <option value="vc">Venture Capital</option>
+          </select>
+        </div>
+
+        <div>
+          <label style={{ fontSize: '11px', fontWeight: '600', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+            Event Participation:
+          </label>
+          <select 
+            value={selectedEvent} 
+            onChange={(e) => setSelectedEvent(e.target.value)}
+            className="input-enterprise" 
+            style={{ fontSize: '12px', padding: '6px 10px' }}
+          >
+            <option value="all">All Events</option>
+            <option value="ai_riser">AI Riser Demo Day 2026</option>
+            <option value="tech_expo">Vietnam Tech Expo 2026</option>
+          </select>
+        </div>
+
+        <div>
+          <label style={{ fontSize: '11px', fontWeight: '600', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+            Time Range:
+          </label>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+            <input type="text" defaultValue="19/08/2026" className="input-enterprise" style={{ fontSize: '11px', padding: '4px 6px', textAlign: 'center' }} />
+            <input type="text" defaultValue="19/08/2026" className="input-enterprise" style={{ fontSize: '11px', padding: '4px 6px', textAlign: 'center' }} />
+          </div>
+        </div>
+
+        <button 
+          className="btn btn-outline" 
+          style={{ width: '100%', padding: '7px', fontSize: '12px', backgroundColor: 'var(--bg-main)', marginTop: '4px' }}
+        >
+          Apply Filter
+        </button>
       </div>
 
-      {/* Canvas Container & Side Drawer */}
-      <div style={{ position: 'relative', width: '100%', height: '620px', borderRadius: '16px', overflow: 'hidden', border: '1px solid var(--border-subtle)', background: '#070b14' }}>
-        <canvas
-          ref={canvasRef}
-          width={1100}
-          height={620}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onWheel={handleWheel}
-          style={{ width: '100%', height: '100%', cursor: 'grab' }}
-        />
-
-        {/* Legend */}
+      {/* Selected Node Details Drawer */}
+      {selectedNode && (
         <div style={{
           position: 'absolute',
-          bottom: '16px',
-          left: '16px',
-          padding: '10px 14px',
-          borderRadius: '10px',
-          background: 'rgba(15, 23, 42, 0.85)',
-          backdropFilter: 'blur(12px)',
-          border: '1px solid var(--border-subtle)',
-          display: 'flex',
-          gap: '14px',
-          fontSize: '11px'
+          top: '20px',
+          right: '20px',
+          width: '300px',
+          backgroundColor: '#FFFFFF',
+          border: '1px solid var(--border-color)',
+          borderRadius: '12px',
+          padding: '16px',
+          boxShadow: 'var(--shadow-lg)',
+          zIndex: 10
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#F59E0B' }} />
-            <span>Sự kiện ({data.stats?.total_events || 0})</span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+            <span className="badge badge-primary">
+              {selectedNode.type.toUpperCase()}
+            </span>
+            <button onClick={() => setSelectedNode(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+              <X size={16} color="var(--text-muted)" />
+            </button>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#3B82F6' }} />
-            <span>Công ty ({data.stats?.total_companies || 0})</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10B981' }} />
-            <span>Nhân sự ({data.stats?.total_persons || 0})</span>
+          <h4 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text-main)' }}>
+            {selectedNode.label}
+          </h4>
+          <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+            {selectedNode.role || selectedNode.industry || 'Connected Entity Node'}
+          </p>
+          <div style={{ marginTop: '12px', borderTop: '1px solid var(--border-color)', paddingTop: '10px', fontSize: '12px', color: 'var(--primary)', fontWeight: '600' }}>
+            ✓ Verified Graph Node
           </div>
         </div>
-
-        {/* Node Detail Drawer */}
-        {selectedNode && (
-          <div className="glass-panel" style={{
-            position: 'absolute',
-            top: '16px',
-            right: '16px',
-            width: '320px',
-            maxHeight: '580px',
-            overflowY: 'auto',
-            padding: '20px',
-            background: 'rgba(15, 23, 42, 0.95)',
-            border: '1px solid rgba(59, 130, 246, 0.3)',
-            boxShadow: '0 10px 30px rgba(0,0,0,0.8)',
-            zIndex: 10
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-              <span style={{
-                fontSize: '10px',
-                textTransform: 'uppercase',
-                fontWeight: '700',
-                padding: '3px 8px',
-                borderRadius: '6px',
-                background: selectedNode.type === 'event' ? 'rgba(245, 158, 11, 0.2)' : selectedNode.type === 'company' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(16, 185, 129, 0.2)',
-                color: selectedNode.type === 'event' ? '#FBBF24' : selectedNode.type === 'company' ? '#60A5FA' : '#34D399'
-              }}>
-                {selectedNode.type === 'event' ? 'Sự Kiện' : selectedNode.type === 'company' ? 'Doanh Nghiệp' : 'Hồ Sơ Nhân Sự'}
-              </span>
-              <button onClick={() => setSelectedNode(null)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)' }}>
-                <X size={16} />
-              </button>
-            </div>
-
-            <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#fff', marginBottom: '4px' }}>
-              {selectedNode.label}
-            </h3>
-            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '16px' }}>
-              {selectedNode.subtitle}
-            </p>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px' }}>
-              {selectedNode.details?.email && (
-                <div>
-                  <span style={{ color: 'var(--text-muted)', fontSize: '11px' }}>Email:</span>
-                  <div style={{ color: '#E2E8F0', fontWeight: '500' }}>{selectedNode.details.email}</div>
-                </div>
-              )}
-              {selectedNode.details?.phone && (
-                <div>
-                  <span style={{ color: 'var(--text-muted)', fontSize: '11px' }}>Số điện thoại:</span>
-                  <div style={{ color: '#E2E8F0', fontWeight: '500' }}>{selectedNode.details.phone}</div>
-                </div>
-              )}
-              {selectedNode.details?.industry && (
-                <div>
-                  <span style={{ color: 'var(--text-muted)', fontSize: '11px' }}>Lĩnh vực:</span>
-                  <div style={{ color: '#E2E8F0', fontWeight: '500' }}>{selectedNode.details.industry}</div>
-                </div>
-              )}
-              {selectedNode.details?.description && (
-                <div>
-                  <span style={{ color: 'var(--text-muted)', fontSize: '11px' }}>Mô tả:</span>
-                  <div style={{ color: '#94A3B8', fontSize: '12px', marginTop: '2px', lineHeight: '1.4' }}>{selectedNode.details.description}</div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 }

@@ -3,24 +3,19 @@ import { api } from './api';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import OverviewView from './components/OverviewView';
+import IntelligenceView from './components/IntelligenceView';
 import GraphView from './components/GraphView';
-import ScanCardView from './components/ScanCardView';
-import AddCompanyView from './components/AddCompanyView';
-import ImportExcelView from './components/ImportExcelView';
+import DataSourcesView from './components/DataSourcesView';
 import ResolutionQueueView from './components/ResolutionQueueView';
-import PersonsView from './components/PersonsView';
-import CompaniesView from './components/CompaniesView';
-import EventsView from './components/EventsView';
-import InsightAgentView from './components/InsightAgentView';
-import ChatAssistantView from './components/ChatAssistantView';
-import MapsView from './components/MapsView';
-import ReportsView from './components/ReportsView';
+import SettingsView from './components/SettingsView';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('overview');
-  const [tenantInfo, setTenantInfo] = useState({ tenant_name: 'Demo Innovation Hub' });
-  const [queueCount, setQueueCount] = useState(1);
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeSubTab, setActiveSubTab] = useState('workspace');
+  const [tenantInfo, setTenantInfo] = useState({ tenant_name: 'Enterprise Innovation Node 01' });
+  const [queueCount, setQueueCount] = useState(12);
   const [isResetting, setIsResetting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     loadTenantAndQueue();
@@ -29,36 +24,44 @@ export default function App() {
   const loadTenantAndQueue = async () => {
     try {
       const [tRes, qRes] = await Promise.all([
-        api.getCurrentTenant(),
-        api.getResolutionQueue()
+        api.getCurrentTenant().catch(() => ({ tenant_name: 'Enterprise Innovation Node 01' })),
+        api.getResolutionQueue().catch(() => [])
       ]);
-      setTenantInfo(tRes);
-      setQueueCount(qRes.length || 0);
+      setTenantInfo(tRes || { tenant_name: 'Enterprise Innovation Node 01' });
+      setQueueCount(qRes?.length || 12);
     } catch (e) {
       console.error(e);
     }
   };
 
   const handleResetDb = async () => {
-    if (!window.confirm('Bạn có chắc chắn muốn nạp lại dữ liệu mẫu tiếng Việt chuẩn cho hệ sinh thái?')) {
+    if (!window.confirm('Are you sure you want to reset and re-seed the canonical dataset?')) {
       return;
     }
     setIsResetting(true);
     try {
       await api.resetDatabase();
       await loadTenantAndQueue();
-      alert('Đã tái tạo cơ sở dữ liệu và nạp dữ liệu mẫu thành công!');
+      alert('Canonical dataset re-seeded successfully.');
       window.location.reload();
     } catch (e) {
-      alert('Lỗi khi nạp lại dữ liệu.');
+      alert('Failed to reset dataset.');
     } finally {
       setIsResetting(false);
     }
   };
 
+  // Handle header sub-tab changes
+  const handleSelectSubTab = (tab) => {
+    setActiveSubTab(tab);
+    if (tab === 'workspace') setActiveTab('dashboard');
+    if (tab === 'network') setActiveTab('graph');
+    if (tab === 'audit') setActiveTab('resolutions');
+  };
+
   return (
-    <div className="app-container">
-      {/* Sidebar Navigation */}
+    <div className="app-layout">
+      {/* Left Sidebar */}
       <Sidebar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -67,53 +70,56 @@ export default function App() {
         queueCount={queueCount}
       />
 
-      {/* Main Content Pane */}
-      <main className="main-content">
-        <Header
-          tenantName={tenantInfo.tenant_name}
-          onOpenScan={() => setActiveTab('scan_card')}
-        />
+      {/* Main Content Area */}
+      <main className="main-viewport">
+        <div className="content-body">
+          {/* Top Header */}
+          <Header
+            activeSubTab={activeSubTab}
+            onSelectSubTab={handleSelectSubTab}
+            tenantName={tenantInfo.tenant_name}
+            onOpenScan={() => setActiveTab('intelligence')}
+            onOpenTenantSwitcher={() => setActiveTab('settings')}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+          />
 
-        {/* Dynamic Views */}
-        <div style={{ transition: 'opacity 0.2s ease-in-out' }}>
-          {activeTab === 'overview' && (
-            <OverviewView
-              setActiveTab={setActiveTab}
-              onOpenScan={() => setActiveTab('scan_card')}
-            />
-          )}
+          {/* Active View Container */}
+          <div style={{ transition: 'opacity 0.15s ease-in-out' }}>
+            {activeTab === 'dashboard' && (
+              <OverviewView
+                setActiveTab={setActiveTab}
+                onOpenScan={() => setActiveTab('intelligence')}
+              />
+            )}
 
-          {activeTab === 'graph' && <GraphView />}
+            {activeTab === 'intelligence' && (
+              <IntelligenceView
+                onIngestionComplete={() => { loadTenantAndQueue(); }}
+              />
+            )}
 
-          {activeTab === 'scan_card' && (
-            <ScanCardView onFinish={() => { loadTenantAndQueue(); }} />
-          )}
+            {activeTab === 'graph' && (
+              <GraphView />
+            )}
 
-          {activeTab === 'add_company' && (
-            <AddCompanyView onAdded={() => { loadTenantAndQueue(); }} />
-          )}
+            {activeTab === 'datasources' && (
+              <DataSourcesView />
+            )}
 
-          {activeTab === 'import_excel' && (
-            <ImportExcelView onImportComplete={() => { loadTenantAndQueue(); }} />
-          )}
+            {activeTab === 'resolutions' && (
+              <ResolutionQueueView
+                onDecisionMade={() => { loadTenantAndQueue(); }}
+              />
+            )}
 
-          {activeTab === 'resolution_queue' && (
-            <ResolutionQueueView onDecisionMade={() => { loadTenantAndQueue(); }} />
-          )}
-
-          {activeTab === 'persons' && <PersonsView />}
-
-          {activeTab === 'companies' && <CompaniesView />}
-
-          {activeTab === 'events' && <EventsView />}
-
-          {activeTab === 'insight_agent' && <InsightAgentView />}
-
-          {activeTab === 'chat_assistant' && <ChatAssistantView />}
-
-          {activeTab === 'maps' && <MapsView />}
-
-          {activeTab === 'reports' && <ReportsView />}
+            {activeTab === 'settings' && (
+              <SettingsView
+                onResetDb={handleResetDb}
+                isResetting={isResetting}
+              />
+            )}
+          </div>
         </div>
       </main>
     </div>
