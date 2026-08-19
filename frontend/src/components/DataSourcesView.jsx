@@ -12,7 +12,8 @@ import {
   Layers,
   ArrowRight,
   ExternalLink,
-  Filter
+  Filter,
+  Check
 } from 'lucide-react';
 
 export default function DataSourcesView() {
@@ -71,31 +72,32 @@ export default function DataSourcesView() {
   );
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '26px' }}>
+      {/* Header with Large Font Size */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h2 style={{ fontSize: '22px', fontWeight: '800', color: 'var(--text-main)' }}>
+          <h2 style={{ fontSize: '26px', fontWeight: '800', color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
             Enterprise Data Sources & Grounded Entities
           </h2>
-          <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '2px' }}>
+          <p style={{ fontSize: '15px', color: 'var(--text-muted)', marginTop: '4px' }}>
             Batch Excel attendee parsing, verified entity directory, and Google Workspace 2-way synchronization.
           </p>
         </div>
 
-        {/* Sub tabs */}
-        <div style={{ display: 'flex', gap: '4px', backgroundColor: 'var(--bg-muted)', padding: '4px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+        {/* Sub tabs switcher */}
+        <div style={{ display: 'flex', gap: '6px', backgroundColor: 'var(--bg-muted)', padding: '5px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
           <button
             onClick={() => setActiveTab('excel')}
             style={{
-              padding: '6px 14px',
-              borderRadius: '6px',
+              padding: '9px 18px',
+              borderRadius: '8px',
               border: 'none',
               backgroundColor: activeTab === 'excel' ? '#FFFFFF' : 'transparent',
               color: activeTab === 'excel' ? 'var(--primary)' : 'var(--text-muted)',
-              fontWeight: activeTab === 'excel' ? '700' : '500',
-              fontSize: '12.5px',
-              cursor: 'pointer'
+              fontWeight: activeTab === 'excel' ? '800' : '600',
+              fontSize: '14px',
+              cursor: 'pointer',
+              boxShadow: activeTab === 'excel' ? 'var(--shadow-sm)' : 'none'
             }}
           >
             Excel Batch Import
@@ -103,14 +105,15 @@ export default function DataSourcesView() {
           <button
             onClick={() => setActiveTab('entities')}
             style={{
-              padding: '6px 14px',
-              borderRadius: '6px',
+              padding: '9px 18px',
+              borderRadius: '8px',
               border: 'none',
               backgroundColor: activeTab === 'entities' ? '#FFFFFF' : 'transparent',
               color: activeTab === 'entities' ? 'var(--primary)' : 'var(--text-muted)',
-              fontWeight: activeTab === 'entities' ? '700' : '500',
-              fontSize: '12.5px',
-              cursor: 'pointer'
+              fontWeight: activeTab === 'entities' ? '800' : '600',
+              fontSize: '14px',
+              cursor: 'pointer',
+              boxShadow: activeTab === 'entities' ? 'var(--shadow-sm)' : 'none'
             }}
           >
             Canonical Directory ({persons.length + companies.length})
@@ -118,14 +121,15 @@ export default function DataSourcesView() {
           <button
             onClick={() => setActiveTab('sheets')}
             style={{
-              padding: '6px 14px',
-              borderRadius: '6px',
+              padding: '9px 18px',
+              borderRadius: '8px',
               border: 'none',
               backgroundColor: activeTab === 'sheets' ? '#FFFFFF' : 'transparent',
               color: activeTab === 'sheets' ? 'var(--primary)' : 'var(--text-muted)',
-              fontWeight: activeTab === 'sheets' ? '700' : '500',
-              fontSize: '12.5px',
-              cursor: 'pointer'
+              fontWeight: activeTab === 'sheets' ? '800' : '600',
+              fontSize: '14px',
+              cursor: 'pointer',
+              boxShadow: activeTab === 'sheets' ? 'var(--shadow-sm)' : 'none'
             }}
           >
             Google Workspace Export
@@ -135,64 +139,64 @@ export default function DataSourcesView() {
 
       {/* TAB 1: EXCEL BATCH IMPORT */}
       {activeTab === 'excel' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 520px) minmax(0, 1fr)', gap: '20px' }}>
-          <div className="card-enterprise" style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <FileSpreadsheet size={18} color="var(--primary)" />
-              <h3 style={{ fontSize: '15px', fontWeight: '700' }}>CSV / Excel Batch Parser</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 560px) minmax(0, 1fr)', gap: '26px' }}>
+          <div className="card-enterprise" style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <FileSpreadsheet size={22} color="var(--primary)" />
+              <h3 style={{ fontSize: '18px', fontWeight: '800' }}>CSV / Excel Batch Parser</h3>
             </div>
-            <p style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>
+            <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
               Edit raw attendee records. The system auto-identifies Person, Company affiliation, and Event participation roles.
             </p>
 
             <textarea 
               value={csvText}
               onChange={(e) => setCsvText(e.target.value)}
-              rows={11}
+              rows={12}
               className="input-enterprise font-mono"
-              style={{ fontSize: '11px', lineHeight: '1.45', backgroundColor: '#FFFFFF' }}
+              style={{ fontSize: '13px', lineHeight: '1.6', backgroundColor: '#FFFFFF', padding: '14px', borderRadius: '10px' }}
             />
 
             <button
               onClick={handleImportCSV}
               disabled={isImporting}
               className="btn btn-primary"
-              style={{ width: '100%', padding: '9px' }}
+              style={{ width: '100%', padding: '12px', fontSize: '14.5px' }}
             >
-              <Upload size={15} />
+              <Upload size={16} />
               <span>{isImporting ? 'Parsing & Linking Nodes...' : 'Execute Batch Ingestion (10 Rows)'}</span>
             </button>
           </div>
 
           {/* Import Summary Result */}
-          <div className="card-enterprise" style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            <h3 style={{ fontSize: '15px', fontWeight: '700' }}>
+          <div className="card-enterprise" style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: '800' }}>
               Batch Ingestion Diagnostic Report
             </h3>
             
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div style={{ padding: '12px 14px', borderRadius: '8px', backgroundColor: 'var(--bg-main)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--success)', fontWeight: '700', fontSize: '13px' }}>
-                  <CheckCircle2 size={16} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ padding: '16px 20px', borderRadius: '12px', backgroundColor: 'var(--bg-main)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--success)', fontWeight: '800', fontSize: '15px' }}>
+                  <CheckCircle2 size={18} />
                   <span>Column Header Auto-Mapping Verified</span>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '130px 1fr', gap: '6px', fontSize: '12px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '150px 1fr', gap: '8px', fontSize: '14px' }}>
                   <span style={{ color: 'var(--text-muted)' }}>Mapped Person:</span>
-                  <span style={{ fontWeight: '600' }}>full_name, email, phone</span>
+                  <span style={{ fontWeight: '700' }}>full_name, email, phone</span>
 
                   <span style={{ color: 'var(--text-muted)' }}>Mapped Company:</span>
-                  <span style={{ fontWeight: '600' }}>company, title</span>
+                  <span style={{ fontWeight: '700' }}>company, title</span>
 
                   <span style={{ color: 'var(--text-muted)' }}>Mapped Event Role:</span>
-                  <span style={{ fontWeight: '600' }}>event_role (Speaker / VIP / Attendee)</span>
+                  <span style={{ fontWeight: '700' }}>event_role (Speaker / VIP / Attendee)</span>
                 </div>
               </div>
 
-              <div style={{ padding: '12px 14px', borderRadius: '8px', backgroundColor: 'var(--primary-light)', border: '1px solid var(--primary-border)' }}>
-                <div style={{ fontSize: '12.5px', fontWeight: '700', color: 'var(--primary)' }}>
+              <div style={{ padding: '16px 20px', borderRadius: '12px', backgroundColor: 'var(--primary-light)', border: '1px solid var(--primary-border)' }}>
+                <div style={{ fontSize: '15px', fontWeight: '800', color: 'var(--primary)' }}>
                   ⚡ Automated Entity Resolution Pipeline
                 </div>
-                <p style={{ fontSize: '11.5px', color: 'var(--text-main)', marginTop: '2px' }}>
+                <p style={{ fontSize: '13.5px', color: 'var(--text-main)', marginTop: '4px', lineHeight: '1.6' }}>
                   All 10 attendee records are automatically matched against 3,105 canonical companies. Unresolved duplicates are sent to the Resolution Queue with complete audit trail.
                 </p>
               </div>
@@ -203,57 +207,57 @@ export default function DataSourcesView() {
 
       {/* TAB 2: CANONICAL DIRECTORY */}
       {activeTab === 'entities' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-            <div style={{ position: 'relative', width: '320px' }}>
-              <Search size={15} color="var(--text-light)" style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)' }} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px' }}>
+            <div style={{ position: 'relative', width: '380px' }}>
+              <Search size={18} color="var(--text-light)" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }} />
               <input 
                 type="text"
                 placeholder="Search canonical persons or companies..."
                 value={filterSearch}
                 onChange={(e) => setFilterSearch(e.target.value)}
                 className="input-enterprise"
-                style={{ paddingLeft: '32px', fontSize: '12.5px' }}
+                style={{ paddingLeft: '40px', fontSize: '14px', height: '44px' }}
               />
             </div>
-            <span className="badge badge-primary">
+            <span className="badge badge-primary" style={{ fontSize: '13px', padding: '5px 12px' }}>
               {filteredPersons.length} Persons · {companies.length} Companies Grounded
             </span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '24px' }}>
             {/* Persons List */}
-            <div className="card-enterprise" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '520px', overflowY: 'auto' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                <Users size={18} color="var(--primary)" />
-                <h3 style={{ fontSize: '15px', fontWeight: '700' }}>Canonical Persons Directory</h3>
+            <div className="card-enterprise" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '560px', overflowY: 'auto' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+                <Users size={20} color="var(--primary)" />
+                <h3 style={{ fontSize: '17px', fontWeight: '800' }}>Canonical Persons Directory</h3>
               </div>
               {filteredPersons.map(p => (
-                <div key={p.id} style={{ padding: '10px 12px', borderRadius: '8px', backgroundColor: 'var(--bg-main)', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div key={p.id} style={{ padding: '14px 16px', borderRadius: '10px', backgroundColor: 'var(--bg-main)', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
-                    <div style={{ fontSize: '13.5px', fontWeight: '700', color: 'var(--text-main)' }}>{p.full_name}</div>
-                    <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>{p.title}</div>
-                    <div style={{ fontSize: '11px', color: 'var(--primary)', fontFamily: 'var(--font-mono)' }}>✉ {p.email}</div>
+                    <div style={{ fontSize: '15.5px', fontWeight: '800', color: 'var(--text-main)' }}>{p.full_name}</div>
+                    <div style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '2px' }}>{p.title}</div>
+                    <div style={{ fontSize: '12.5px', color: 'var(--primary)', fontFamily: 'var(--font-mono)', marginTop: '2px', fontWeight: '700' }}>✉ {p.email}</div>
                   </div>
-                  <span className="badge badge-success">✓ Verified Node</span>
+                  <span className="badge badge-success" style={{ fontSize: '12px' }}>✓ Verified Node</span>
                 </div>
               ))}
             </div>
 
             {/* Companies List */}
-            <div className="card-enterprise" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '520px', overflowY: 'auto' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                <Building2 size={18} color="var(--secondary)" />
-                <h3 style={{ fontSize: '15px', fontWeight: '700' }}>Grounded Companies Directory</h3>
+            <div className="card-enterprise" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '560px', overflowY: 'auto' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+                <Building2 size={20} color="var(--secondary)" />
+                <h3 style={{ fontSize: '17px', fontWeight: '800' }}>Grounded Companies Directory</h3>
               </div>
               {companies.map(c => (
-                <div key={c.id} style={{ padding: '10px 12px', borderRadius: '8px', backgroundColor: 'var(--bg-main)', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div key={c.id} style={{ padding: '14px 16px', borderRadius: '10px', backgroundColor: 'var(--bg-main)', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
-                    <div style={{ fontSize: '13.5px', fontWeight: '700', color: 'var(--text-main)' }}>{c.name}</div>
-                    <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>{c.industry}</div>
-                    <div style={{ fontSize: '11px', color: 'var(--secondary)', fontFamily: 'var(--font-mono)' }}>🌐 {c.domain}</div>
+                    <div style={{ fontSize: '15.5px', fontWeight: '800', color: 'var(--text-main)' }}>{c.name}</div>
+                    <div style={{ fontSize: '13.5px', color: 'var(--text-muted)', marginTop: '2px' }}>{c.industry}</div>
+                    <div style={{ fontSize: '12.5px', color: 'var(--secondary)', fontFamily: 'var(--font-mono)', marginTop: '2px', fontWeight: '700' }}>🌐 {c.domain}</div>
                   </div>
-                  <span className="badge badge-secondary">Grounded</span>
+                  <span className="badge badge-secondary" style={{ fontSize: '12px' }}>Grounded</span>
                 </div>
               ))}
             </div>
@@ -263,39 +267,39 @@ export default function DataSourcesView() {
 
       {/* TAB 3: GOOGLE SHEETS EXPORT */}
       {activeTab === 'sheets' && (
-        <div className="card-enterprise" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <FileSpreadsheet size={22} color="var(--success)" />
-            <h3 style={{ fontSize: '16px', fontWeight: '700' }}>Google Workspace & Enterprise Sheets Export</h3>
+        <div className="card-enterprise" style={{ padding: '28px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <FileSpreadsheet size={26} color="var(--success)" />
+            <h3 style={{ fontSize: '19px', fontWeight: '800' }}>Google Workspace & Enterprise Sheets Export</h3>
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--text-muted)', maxWidth: '640px' }}>
+          <p style={{ fontSize: '14.5px', color: 'var(--text-muted)', maxWidth: '720px', lineHeight: '1.6' }}>
             Export live normalized data directly to Google Sheets CSV structure or trigger automated sync to Google Cloud Storage.
           </p>
 
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
             <button 
               onClick={() => window.open('/api/reports/export/persons.csv', '_blank')}
               className="btn btn-outline"
-              style={{ padding: '8px 16px' }}
+              style={{ padding: '10px 20px', fontSize: '14.5px' }}
             >
-              <Download size={15} />
+              <Download size={16} />
               <span>Export Standardized Persons.csv</span>
             </button>
             <button 
               onClick={() => window.open('/api/reports/export/companies.csv', '_blank')}
               className="btn btn-outline"
-              style={{ padding: '8px 16px' }}
+              style={{ padding: '10px 20px', fontSize: '14.5px' }}
             >
-              <Download size={15} />
+              <Download size={16} />
               <span>Export Grounded Companies.csv</span>
             </button>
           </div>
 
-          <div style={{ padding: '14px', borderRadius: '8px', backgroundColor: 'var(--bg-main)', border: '1px solid var(--border-color)', marginTop: '8px' }}>
-            <div style={{ fontSize: '11px', fontWeight: '700', color: 'var(--text-muted)', textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>
+          <div style={{ padding: '18px 22px', borderRadius: '12px', backgroundColor: 'var(--bg-main)', border: '1px solid var(--border-color)', marginTop: '8px' }}>
+            <div style={{ fontSize: '12px', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', fontFamily: 'var(--font-mono)' }}>
               Recent Export Jobs Log
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-main)', marginTop: '6px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div style={{ fontSize: '14px', color: 'var(--text-main)', marginTop: '8px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
               <div>• <code>export_persons_2026-08-19.csv</code> (24,592 records · 1.4 MB) — <strong>Completed</strong></div>
               <div>• <code>export_companies_grounded.csv</code> (3,105 records · 820 KB) — <strong>Completed</strong></div>
             </div>

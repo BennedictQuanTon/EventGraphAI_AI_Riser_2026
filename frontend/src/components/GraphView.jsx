@@ -10,11 +10,11 @@ import {
   User, 
   Calendar, 
   Sparkles, 
-  X,
-  Layers,
-  ExternalLink,
-  ShieldCheck,
-  Maximize2
+  X, 
+  Layers, 
+  ExternalLink, 
+  ShieldCheck, 
+  Maximize2 
 } from 'lucide-react';
 
 export default function GraphView() {
@@ -27,32 +27,32 @@ export default function GraphView() {
   // Deterministic Fixed Nodes Structure (Spacious, No Overlap, No Vibration)
   const initialNodes = [
     // Center Event Hub
-    { id: 'e1', label: 'AI Riser Demo Day 2026', type: 'event', x: 0, y: 0, radius: 36, venue: 'NIC Hanoi', date: 'Aug 20, 2026', attendees: '4,200+' },
+    { id: 'e1', label: 'AI Riser Demo Day 2026', type: 'event', x: 0, y: 0, radius: 38, venue: 'NIC Hanoi', date: 'Aug 20, 2026', attendees: '4,200+' },
     
     // Top Center Company & Lead
-    { id: 'c5', label: 'National Innovation Hub', type: 'company', industry: 'Incubation Center', domain: 'innovatehub.org.vn', x: 0, y: -260, radius: 32 },
-    { id: 'p6', label: 'Do Thu Trang', role: 'Head of Partnerships', type: 'person', company: 'National Innovation Hub', avatar: 'TT', email: 'trang.do@innovatehub.org.vn', x: 130, y: -300, radius: 24 },
+    { id: 'c5', label: 'National Innovation Hub', type: 'company', industry: 'Incubation Center', domain: 'innovatehub.org.vn', x: 0, y: -270, radius: 34 },
+    { id: 'p6', label: 'Do Thu Trang', role: 'Head of Partnerships', type: 'person', company: 'National Innovation Hub', avatar: 'TT', email: 'trang.do@innovatehub.org.vn', x: 140, y: -310, radius: 25 },
 
     // Top-Left: NextGen AI & Executives
-    { id: 'c1', label: 'NextGen AI Vietnam', type: 'company', industry: 'Artificial Intelligence & Analytics', domain: 'nextgenai.vn', x: -320, y: -150, radius: 34 },
-    { id: 'p1', label: 'Nguyen Thanh Son', role: 'Director of BD', type: 'person', company: 'NextGen AI Vietnam', avatar: 'NS', email: 'son.nguyen@nextgenai.vn', x: -470, y: -200, radius: 24 },
-    { id: 'p5', label: 'Le Hoang Quan', role: 'Senior AI Lead', type: 'person', company: 'NextGen AI Vietnam', avatar: 'LQ', email: 'quan.le@nextgenai.vn', x: -470, y: -100, radius: 24 },
+    { id: 'c1', label: 'NextGen AI Vietnam', type: 'company', industry: 'Artificial Intelligence & Analytics', domain: 'nextgenai.vn', x: -330, y: -160, radius: 35 },
+    { id: 'p1', label: 'Nguyen Thanh Son', role: 'Director of BD', type: 'person', company: 'NextGen AI Vietnam', avatar: 'NS', email: 'son.nguyen@nextgenai.vn', x: -480, y: -210, radius: 25 },
+    { id: 'p5', label: 'Le Hoang Quan', role: 'Senior AI Lead', type: 'person', company: 'NextGen AI Vietnam', avatar: 'LQ', email: 'quan.le@nextgenai.vn', x: -480, y: -110, radius: 25 },
 
     // Top-Right: VinFintech & Founder
-    { id: 'c2', label: 'VinFintech Payments', type: 'company', industry: 'Financial Technology (FinTech)', domain: 'vinfinpay.com', x: 320, y: -150, radius: 34 },
-    { id: 'p2', label: 'Tran Thi Mai Anh', role: 'CEO & Founder', type: 'person', company: 'VinFintech Payments', avatar: 'MA', email: 'maianh.tran@vinfinpay.com', x: 470, y: -150, radius: 24 },
+    { id: 'c2', label: 'VinFintech Payments', type: 'company', industry: 'Financial Technology (FinTech)', domain: 'vinfinpay.com', x: 330, y: -160, radius: 35 },
+    { id: 'p2', label: 'Tran Thi Mai Anh', role: 'CEO & Founder', type: 'person', company: 'VinFintech Payments', avatar: 'MA', email: 'maianh.tran@vinfinpay.com', x: 480, y: -160, radius: 25 },
 
     // Bottom-Left: Dragon VC & Investor
-    { id: 'c3', label: 'Dragon Venture Capital', type: 'company', industry: 'Venture Capital & Funds', domain: 'dragonvc.fund', x: -320, y: 160, radius: 34 },
-    { id: 'p3', label: 'Pham Minh Duc', role: 'Managing Partner', type: 'person', company: 'Dragon Venture Capital', avatar: 'MD', email: 'duc.pham@dragonvc.fund', x: -470, y: 160, radius: 24 },
+    { id: 'c3', label: 'Dragon Venture Capital', type: 'company', industry: 'Venture Capital & Funds', domain: 'dragonvc.fund', x: -330, y: 170, radius: 35 },
+    { id: 'p3', label: 'Pham Minh Duc', role: 'Managing Partner', type: 'person', company: 'Dragon Venture Capital', avatar: 'MD', email: 'duc.pham@dragonvc.fund', x: -480, y: 170, radius: 25 },
 
     // Bottom-Right: Nexus Ventures & Partner
-    { id: 'c4', label: 'Nexus Ventures SG', type: 'company', industry: 'Global Tech Fund', domain: 'nexusventures.sg', x: 320, y: 160, radius: 34 },
-    { id: 'p4', label: 'Alex Chen', role: 'General Partner', type: 'person', company: 'Nexus Ventures SG', avatar: 'AC', email: 'alex.chen@nexusventures.sg', x: 470, y: 160, radius: 24 },
+    { id: 'c4', label: 'Nexus Ventures SG', type: 'company', industry: 'Global Tech Fund', domain: 'nexusventures.sg', x: 330, y: 170, radius: 35 },
+    { id: 'p4', label: 'Alex Chen', role: 'General Partner', type: 'person', company: 'Nexus Ventures SG', avatar: 'AC', email: 'alex.chen@nexusventures.sg', x: 480, y: 170, radius: 25 },
 
     // Bottom-Center: ESG & Cyber Startups
-    { id: 'p7', label: 'Vu Dang Khoa', role: 'CTO & Co-Founder', type: 'person', company: 'GreenFuture ESG', avatar: 'VK', email: 'khoa.vu@greenfuture.vn', x: -140, y: 280, radius: 24 },
-    { id: 'p8', label: 'Bui Quoc Hung', role: 'VP of Security', type: 'person', company: 'CyberGuard Security', avatar: 'BH', email: 'hung.bui@cyberguard.vn', x: 140, y: 280, radius: 24 }
+    { id: 'p7', label: 'Vu Dang Khoa', role: 'CTO & Co-Founder', type: 'person', company: 'GreenFuture ESG', avatar: 'VK', email: 'khoa.vu@greenfuture.vn', x: -150, y: 290, radius: 25 },
+    { id: 'p8', label: 'Bui Quoc Hung', role: 'VP of Security', type: 'person', company: 'CyberGuard Security', avatar: 'BH', email: 'hung.bui@cyberguard.vn', x: 150, y: 290, radius: 25 }
   ];
 
   const initialLinks = [
@@ -85,7 +85,6 @@ export default function GraphView() {
     camera: { x: 0, y: 0, zoom: 0.95 },
     isDragging: false,
     dragNode: null,
-    dragStart: { x: 0, y: 0 },
     lastMouse: { x: 0, y: 0 }
   });
 
@@ -130,7 +129,7 @@ export default function GraphView() {
       ctx.moveTo(source.x, source.y);
       ctx.lineTo(target.x, target.y);
       ctx.strokeStyle = l.dashed ? '#CBD5E1' : l.color || '#0052CC';
-      ctx.lineWidth = l.dashed ? 1.8 : 2.4;
+      ctx.lineWidth = l.dashed ? 1.8 : 2.5;
       if (l.dashed) {
         ctx.setLineDash([5, 5]);
       } else {
@@ -139,18 +138,18 @@ export default function GraphView() {
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Edge Relationship Pill Label (Spacious & Crisp)
+      // Edge Relationship Pill Label
       if (l.label && camera.zoom > 0.6) {
         const midX = (source.x + target.x) / 2;
         const midY = (source.y + target.y) / 2;
-        ctx.font = '700 10.5px JetBrains Mono, monospace';
+        ctx.font = '700 11px JetBrains Mono, monospace';
         const labelWidth = ctx.measureText(l.label).width;
 
         ctx.fillStyle = '#FFFFFF';
         ctx.strokeStyle = '#CBD5E1';
         ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.roundRect(midX - labelWidth / 2 - 6, midY - 9, labelWidth + 12, 18, 5);
+        ctx.roundRect(midX - labelWidth / 2 - 6, midY - 10, labelWidth + 12, 20, 5);
         ctx.fill();
         ctx.stroke();
 
@@ -161,7 +160,7 @@ export default function GraphView() {
       }
     });
 
-    // 3. Draw Nodes (Professional Geometric Styling)
+    // 3. Draw Nodes
     nodes.forEach(n => {
       const isSelected = selectedNode?.id === n.id;
 
@@ -172,18 +171,18 @@ export default function GraphView() {
         ctx.rotate(Math.PI / 4);
         ctx.fillStyle = '#FFFFFF';
         ctx.strokeStyle = isSelected ? '#0052CC' : '#FF8C00';
-        ctx.lineWidth = isSelected ? 4.5 : 3;
-        ctx.roundRect(-n.radius, -n.radius, n.radius * 2, n.radius * 2, 10);
+        ctx.lineWidth = isSelected ? 5 : 3.5;
+        ctx.roundRect(-n.radius, -n.radius, n.radius * 2, n.radius * 2, 12);
         ctx.fill();
         ctx.stroke();
         ctx.restore();
 
         ctx.fillStyle = '#FF8C00';
-        ctx.font = '800 13px Plus Jakarta Sans, sans-serif';
+        ctx.font = '800 13.5px Plus Jakarta Sans, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('SUMMIT', n.x, n.y - 6);
-        ctx.font = '700 11px JetBrains Mono, monospace';
+        ctx.fillText('SUMMIT', n.x, n.y - 7);
+        ctx.font = '700 11.5px JetBrains Mono, monospace';
         ctx.fillStyle = '#0F172A';
         ctx.fillText('HUB 2026', n.x, n.y + 8);
 
@@ -193,7 +192,7 @@ export default function GraphView() {
         ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
         ctx.fillStyle = '#FFFFFF';
         ctx.strokeStyle = isSelected ? '#FF8C00' : '#0052CC';
-        ctx.lineWidth = isSelected ? 4 : 3;
+        ctx.lineWidth = isSelected ? 4.5 : 3;
         ctx.fill();
         ctx.stroke();
 
@@ -206,7 +205,7 @@ export default function GraphView() {
         ctx.stroke();
 
         ctx.fillStyle = '#0052CC';
-        ctx.font = '800 12px Plus Jakarta Sans, sans-serif';
+        ctx.font = '800 13px Plus Jakarta Sans, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText('ORG', n.x, n.y);
@@ -217,27 +216,27 @@ export default function GraphView() {
         ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
         ctx.fillStyle = isSelected ? '#EFF6FF' : '#FFFFFF';
         ctx.strokeStyle = isSelected ? '#0052CC' : '#FF8C00';
-        ctx.lineWidth = isSelected ? 3.5 : 2.5;
+        ctx.lineWidth = isSelected ? 4 : 3;
         ctx.fill();
         ctx.stroke();
 
         ctx.fillStyle = isSelected ? '#0052CC' : '#FF8C00';
-        ctx.font = '800 13px Plus Jakarta Sans, sans-serif';
+        ctx.font = '800 13.5px Plus Jakarta Sans, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(n.avatar || 'EX', n.x, n.y);
       }
 
-      // 4. Clean Distinct Node Label Pill (Generous offset below node, never overlaps)
-      const labelY = n.y + n.radius + 16;
-      ctx.font = isSelected ? '800 13.5px Plus Jakarta Sans, sans-serif' : '700 13px Plus Jakarta Sans, sans-serif';
+      // Clean Distinct Node Label Pill
+      const labelY = n.y + n.radius + 18;
+      ctx.font = isSelected ? '800 14px Plus Jakarta Sans, sans-serif' : '700 13.5px Plus Jakarta Sans, sans-serif';
       const labelWidth = ctx.measureText(n.label).width;
 
       ctx.fillStyle = '#FFFFFF';
       ctx.strokeStyle = isSelected ? '#0052CC' : '#CBD5E1';
       ctx.lineWidth = isSelected ? 2 : 1.2;
       ctx.beginPath();
-      ctx.roundRect(n.x - labelWidth / 2 - 10, labelY - 11, labelWidth + 20, 22, 6);
+      ctx.roundRect(n.x - labelWidth / 2 - 10, labelY - 12, labelWidth + 20, 24, 6);
       ctx.fill();
       ctx.stroke();
 
@@ -257,7 +256,7 @@ export default function GraphView() {
     if (!container || !canvas) return;
 
     const width = container.clientWidth || 1000;
-    const height = container.clientHeight || 650;
+    const height = container.clientHeight || 680;
     const dpr = window.devicePixelRatio || 1;
 
     canvas.width = width * dpr;
@@ -268,11 +267,31 @@ export default function GraphView() {
     drawGraph();
   }, [drawGraph]);
 
+  // Non-passive wheel event listener to completely PREVENT page scroll during zoom
   useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const handleNativeWheel = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const zoomFactor = e.deltaY < 0 ? 1.12 : 0.88;
+      const newZoom = Math.max(0.35, Math.min(3.0, graphState.current.camera.zoom * zoomFactor));
+      graphState.current.camera.zoom = newZoom;
+      drawGraph();
+    };
+
+    // Attach with { passive: false } so preventDefault() stops window scrolling!
+    canvas.addEventListener('wheel', handleNativeWheel, { passive: false });
+
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-    return () => window.removeEventListener('resize', resizeCanvas);
-  }, [resizeCanvas]);
+
+    return () => {
+      canvas.removeEventListener('wheel', handleNativeWheel);
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }, [resizeCanvas, drawGraph]);
 
   // Mouse & Pinch Interaction Handlers
   const handleMouseDown = (e) => {
@@ -293,7 +312,7 @@ export default function GraphView() {
     const clicked = nodes.find(n => {
       const dx = n.x - wx;
       const dy = n.y - wy;
-      return Math.sqrt(dx * dx + dy * dy) <= n.radius + 12;
+      return Math.sqrt(dx * dx + dy * dy) <= n.radius + 14;
     });
 
     graphState.current.isDragging = true;
@@ -338,17 +357,8 @@ export default function GraphView() {
     graphState.current.dragNode = null;
   };
 
-  // Pinch-to-zoom & Wheel Zoom
-  const handleWheel = (e) => {
-    e.preventDefault();
-    const zoomFactor = e.deltaY < 0 ? 1.1 : 0.9;
-    const newZoom = Math.max(0.4, Math.min(2.5, graphState.current.camera.zoom * zoomFactor));
-    graphState.current.camera.zoom = newZoom;
-    drawGraph();
-  };
-
   const handleZoomBtn = (factor) => {
-    graphState.current.camera.zoom = Math.max(0.4, Math.min(2.5, graphState.current.camera.zoom * factor));
+    graphState.current.camera.zoom = Math.max(0.35, Math.min(3.0, graphState.current.camera.zoom * factor));
     drawGraph();
   };
 
@@ -374,13 +384,12 @@ export default function GraphView() {
         boxShadow: 'var(--shadow-sm)'
       }}
     >
-      {/* Interactive Fixed Force Canvas */}
+      {/* Interactive Fixed Force Canvas (Wheel zoom does not scroll page) */}
       <canvas 
         ref={canvasRef}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        onWheel={handleWheel}
         style={{ width: '100%', height: '100%', display: 'block', cursor: 'grab' }}
       />
 
@@ -389,11 +398,11 @@ export default function GraphView() {
         position: 'absolute',
         top: '24px',
         left: '24px',
-        width: '300px',
+        width: '310px',
         backgroundColor: '#FFFFFF',
         border: '1px solid var(--border-color)',
         borderRadius: '14px',
-        padding: '20px',
+        padding: '22px',
         boxShadow: 'var(--shadow-md)',
         display: 'flex',
         flexDirection: 'column',
@@ -401,21 +410,21 @@ export default function GraphView() {
         zIndex: 10
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Filter size={18} color="var(--primary)" />
-          <h4 style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-main)' }}>
+          <Filter size={19} color="var(--primary)" />
+          <h4 style={{ fontSize: '17px', fontWeight: '800', color: 'var(--text-main)' }}>
             Filter Graph Dataset
           </h4>
         </div>
 
         <div>
-          <label style={{ fontSize: '13px', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
+          <label style={{ fontSize: '13.5px', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
             Industry Sector:
           </label>
           <select 
             value={selectedIndustry} 
             onChange={(e) => setSelectedIndustry(e.target.value)}
             className="input-enterprise" 
-            style={{ fontSize: '13.5px', padding: '8px 12px' }}
+            style={{ fontSize: '14px', padding: '9px 12px' }}
           >
             <option value="all">All Industries (3,105)</option>
             <option value="ai">Artificial Intelligence & DeepTech</option>
@@ -425,14 +434,14 @@ export default function GraphView() {
         </div>
 
         <div>
-          <label style={{ fontSize: '13px', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
+          <label style={{ fontSize: '13.5px', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
             Summit / Event Participation:
           </label>
           <select 
             value={selectedEvent} 
             onChange={(e) => setSelectedEvent(e.target.value)}
             className="input-enterprise" 
-            style={{ fontSize: '13.5px', padding: '8px 12px' }}
+            style={{ fontSize: '14px', padding: '9px 12px' }}
           >
             <option value="all">All Summits (142)</option>
             <option value="ai_riser">AI Riser Vietnam Demo Day 2026</option>
@@ -442,7 +451,7 @@ export default function GraphView() {
 
         <button 
           className="btn btn-primary" 
-          style={{ width: '100%', padding: '10px', fontSize: '14px', marginTop: '4px' }}
+          style={{ width: '100%', padding: '11px', fontSize: '14.5px', marginTop: '4px' }}
         >
           Apply Active Filter
         </button>
@@ -465,26 +474,26 @@ export default function GraphView() {
         <button 
           onClick={() => handleZoomBtn(1.2)} 
           className="btn btn-outline" 
-          title="Zoom In (or Pinch/Scroll)"
-          style={{ padding: '8px 12px', fontSize: '13px' }}
+          title="Zoom In"
+          style={{ padding: '9px 13px', fontSize: '14px' }}
         >
-          <ZoomIn size={16} />
+          <ZoomIn size={17} />
         </button>
         <button 
           onClick={() => handleZoomBtn(0.8)} 
           className="btn btn-outline" 
-          title="Zoom Out (or Pinch/Scroll)"
-          style={{ padding: '8px 12px', fontSize: '13px' }}
+          title="Zoom Out"
+          style={{ padding: '9px 13px', fontSize: '14px' }}
         >
-          <ZoomOut size={16} />
+          <ZoomOut size={17} />
         </button>
         <button 
           onClick={handleResetCamera} 
           className="btn btn-outline" 
           title="Reset Camera & Layout"
-          style={{ padding: '8px 12px', fontSize: '13px' }}
+          style={{ padding: '9px 13px', fontSize: '14px' }}
         >
-          <RotateCcw size={16} />
+          <RotateCcw size={17} />
         </button>
       </div>
 
@@ -492,15 +501,15 @@ export default function GraphView() {
       <div style={{
         position: 'absolute',
         bottom: '24px',
-        right: selectedNode ? '360px' : '24px',
+        right: selectedNode ? '370px' : '24px',
         backgroundColor: 'rgba(255, 255, 255, 0.98)',
         border: '1px solid var(--border-color)',
         borderRadius: '14px',
-        padding: '12px 18px',
+        padding: '14px 20px',
         display: 'flex',
         flexDirection: 'column',
         gap: '8px',
-        fontSize: '13px',
+        fontSize: '13.5px',
         boxShadow: 'var(--shadow-md)',
         transition: 'right 0.2s ease',
         zIndex: 10
@@ -525,7 +534,7 @@ export default function GraphView() {
           position: 'absolute',
           top: '24px',
           right: '24px',
-          width: '330px',
+          width: '340px',
           backgroundColor: '#FFFFFF',
           border: '1px solid var(--border-color)',
           borderRadius: '16px',
@@ -537,24 +546,24 @@ export default function GraphView() {
           zIndex: 20
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span className={selectedNode.type === 'company' ? 'badge badge-primary' : 'badge badge-secondary'} style={{ fontSize: '12.5px' }}>
+            <span className={selectedNode.type === 'company' ? 'badge badge-primary' : 'badge badge-secondary'} style={{ fontSize: '13px', padding: '4px 10px' }}>
               {selectedNode.type.toUpperCase()}
             </span>
             <button onClick={() => setSelectedNode(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-              <X size={18} color="var(--text-muted)" />
+              <X size={19} color="var(--text-muted)" />
             </button>
           </div>
 
           <div>
-            <h4 style={{ fontSize: '20px', fontWeight: '800', color: 'var(--text-main)' }}>
+            <h4 style={{ fontSize: '21px', fontWeight: '800', color: 'var(--text-main)' }}>
               {selectedNode.label}
             </h4>
-            <p style={{ fontSize: '14px', color: 'var(--primary)', fontWeight: '700', marginTop: '2px' }}>
+            <p style={{ fontSize: '14.5px', color: 'var(--primary)', fontWeight: '700', marginTop: '3px' }}>
               {selectedNode.role || selectedNode.industry}
             </p>
           </div>
 
-          <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13.5px' }}>
+          <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '12px', display: 'flex', flexDirection: 'column', gap: '9px', fontSize: '14px' }}>
             {selectedNode.email && (
               <div>
                 <span style={{ color: 'var(--text-muted)' }}>Email: </span>
@@ -581,8 +590,8 @@ export default function GraphView() {
             )}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: 'var(--success)', fontWeight: '800', marginTop: '6px' }}>
-            <ShieldCheck size={16} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'var(--success)', fontWeight: '800', marginTop: '6px' }}>
+            <ShieldCheck size={17} />
             <span>Verified Canonical Knowledge Node</span>
           </div>
         </div>
