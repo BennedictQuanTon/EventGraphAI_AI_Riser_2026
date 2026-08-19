@@ -16,7 +16,7 @@ def test_api_entities_persons():
     assert response.status_code == 200
     data = response.json()
     assert len(data) >= 10
-    assert any(p["full_name"] == "Nguyễn Thanh Sơn" for p in data)
+    assert any("Nguyen Thanh Son" in p["full_name"] or "Nguyễn Thanh Sơn" in p["full_name"] for p in data)
 
 def test_api_entities_companies():
     response = client.get("/api/entities/companies")

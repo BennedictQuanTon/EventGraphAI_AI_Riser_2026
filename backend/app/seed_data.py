@@ -8,7 +8,7 @@ from backend.app.services.gemini_service import gemini_service
 logger = logging.getLogger("eventgraph.seed")
 
 def seed_database(db: Session, tenant_id: str = "tenant-demo-hub"):
-    """Seed comprehensive, realistic Vietnamese ecosystem dataset"""
+    """Seed comprehensive, realistic enterprise ecosystem dataset"""
     
     # Check if already seeded
     existing = db.query(Tenant).filter(Tenant.id == tenant_id).first()
@@ -17,7 +17,7 @@ def seed_database(db: Session, tenant_id: str = "tenant-demo-hub"):
         return
 
     # 1. Tenant
-    tenant = Tenant(id=tenant_id, name="Demo Innovation Hub (Vietnam)")
+    tenant = Tenant(id=tenant_id, name="Enterprise Innovation Node 01")
     db.add(tenant)
     db.flush()
 
@@ -27,22 +27,36 @@ def seed_database(db: Session, tenant_id: str = "tenant-demo-hub"):
             "id": "ev-ai-riser-2026",
             "name": "AI Riser Vietnam Demo Day 2026",
             "date": "2026-08-20",
-            "location": "Trung tâm Đổi mới Sáng tạo Quốc gia (NIC), Hà Nội",
+            "location": "National Innovation Center (NIC), Hanoi",
             "type": "demo_day"
         },
         {
             "id": "ev-tech-night-2026",
-            "name": "Tech Networking Night Q2/2026",
+            "name": "Enterprise Tech Networking Night Q2/2026",
             "date": "2026-06-15",
-            "location": "The Loop Hub, Quận 1, TP. Hồ Chí Minh",
+            "location": "The Loop Hub, District 1, HCMC",
             "type": "networking"
         },
         {
             "id": "ev-danang-mixer-2025",
-            "name": "Startup Mixer Đà Nẵng 2025",
+            "name": "Southeast Asia Startup Summit 2025",
             "date": "2025-11-10",
-            "location": "Danang Innovation Park, Hải Châu, Đà Nẵng",
+            "location": "Danang Innovation Park, Danang",
             "type": "summit"
+        },
+        {
+            "id": "ev-fintech-expo-2026",
+            "name": "Vietnam FinTech & Banking Expo 2026",
+            "date": "2026-04-18",
+            "location": "SECC Exhibition Center, District 7, HCMC",
+            "type": "conference"
+        },
+        {
+            "id": "ev-cloud-summit-2026",
+            "name": "Google Cloud & AI Developer Fest 2026",
+            "date": "2026-07-22",
+            "location": "JW Marriott Convention Center, Hanoi",
+            "type": "developer_fest"
         }
     ]
 
@@ -66,72 +80,72 @@ def seed_database(db: Session, tenant_id: str = "tenant-demo-hub"):
             "id": "c-nextgen-ai",
             "name": "NextGen AI Vietnam",
             "domain": "nextgenai.vn",
-            "industry": "Trí tuệ nhân tạo (AI & Big Data)",
-            "size_range": "50-100 nhân viên",
-            "description": "Nền tảng phát triển giải pháp AI đa phương thức và tự động hóa quy trình cho doanh nghiệp quy mô vừa và lớn.",
+            "industry": "Artificial Intelligence & Analytics",
+            "size_range": "50-100 employees",
+            "description": "Enterprise multimodal AI platform and automated document intelligence for Tier-1 institutions.",
             "products": ["GenAI Enterprise Suite", "Vision Analytics"]
         },
         {
             "id": "c-vinfinty-pay",
             "name": "VinFintech Payments",
             "domain": "vinfinpay.com",
-            "industry": "Công nghệ Tài chính (FinTech)",
-            "size_range": "100-250 nhân viên",
-            "description": "Cung cấp hạ tầng thanh toán số, giải pháp QR xuyên biên giới và cổng tài chính thông minh cho nhà bán lẻ.",
+            "industry": "Financial Technology (FinTech)",
+            "size_range": "100-250 employees",
+            "description": "Cross-border digital payment gateway and smart POS financial infrastructure for omnichannel retail.",
             "products": ["VinPay Gateway", "Smart POS Terminal"]
-        },
-        {
-            "id": "c-edusmart",
-            "name": "EduSmart Interactive",
-            "domain": "edusmart.edu.vn",
-            "industry": "Công nghệ Giáo dục (EdTech)",
-            "size_range": "20-50 nhân viên",
-            "description": "Nền tảng học tập thích ứng cá nhân hóa cho học sinh và đào tạo kỹ năng AI cho sinh viên đại học.",
-            "products": ["EduSmart AI Tutor", "Virtual Classroom"]
-        },
-        {
-            "id": "c-greenfuture",
-            "name": "GreenFuture ESG Tech",
-            "domain": "greenfuture.vn",
-            "industry": "Công nghệ Xanh & ESG (GreenTech)",
-            "size_range": "10-30 nhân viên",
-            "description": "Phần mềm đo lường phát thải carbon tự động và quản trị báo cáo phát triển bền vững theo chuẩn quốc tế.",
-            "products": ["CarbonTrack Pro", "ESG Compliance Dashboard"]
         },
         {
             "id": "c-dragon-vc",
             "name": "Dragon Venture Capital",
             "domain": "dragonvc.fund",
-            "industry": "Quỹ Đầu tư Khởi nghiệp (Venture Capital)",
-            "size_range": "15-30 nhân viên",
-            "description": "Quỹ đầu tư mạo hiểm giai đoạn Seed và Series A tập trung vào DeepTech, AI và B2B SaaS tại Đông Nam Á.",
+            "industry": "Venture Capital & Private Equity",
+            "size_range": "15-30 investment partners",
+            "description": "Early-stage DeepTech and B2B SaaS venture fund investing across Southeast Asia.",
             "products": ["Dragon Seed Fund III", "Startup Growth Lab"]
         },
         {
             "id": "c-cyberguard",
             "name": "CyberGuard Security",
             "domain": "cyberguard.vn",
-            "industry": "An ninh Mạng & Cloud (Cybersecurity)",
-            "size_range": "30-80 nhân viên",
-            "description": "Giải pháp bảo vệ dữ liệu đám mây và giám sát an toàn thông tin 24/7 ứng dụng máy học cảnh báo sớm.",
+            "industry": "Cloud & Cybersecurity",
+            "size_range": "30-80 engineers",
+            "description": "24/7 AI-driven Security Operations Center (SOC) and proactive cloud threat detection platform.",
             "products": ["ThreatEye SOC", "Cloud Guardian"]
         },
         {
-            "id": "c-agritrust",
-            "name": "AgriTrust Blockchain",
-            "domain": "agritrust.vn",
-            "industry": "Nông nghiệp Công nghệ cao (AgriTech)",
-            "size_range": "20-50 nhân viên",
-            "description": "Hệ thống truy xuất nguồn gốc nông sản và hợp đồng thông minh cho chuỗi cung ứng xuất khẩu nông sản Việt.",
-            "products": ["AgriOrigin Tag", "Supply Trace API"]
+            "id": "c-greenfuture",
+            "name": "GreenFuture ESG Tech",
+            "domain": "greenfuture.vn",
+            "industry": "Climate & ESG Technology",
+            "size_range": "20-50 employees",
+            "description": "Automated greenhouse gas accounting and sustainability disclosure software aligned with global standards.",
+            "products": ["CarbonTrack Pro", "ESG Compliance Dashboard"]
+        },
+        {
+            "id": "c-edusmart",
+            "name": "EduSmart Interactive",
+            "domain": "edusmart.edu.vn",
+            "industry": "Educational Technology (EdTech)",
+            "size_range": "30-60 employees",
+            "description": "Personalized adaptive learning algorithms and AI upskilling curricula for higher education.",
+            "products": ["EduSmart AI Tutor", "Virtual Classroom"]
+        },
+        {
+            "id": "c-nexus-sg",
+            "name": "Nexus Ventures Singapore",
+            "domain": "nexusventures.sg",
+            "industry": "Global Venture Capital",
+            "size_range": "20-40 partners",
+            "description": "Global institutional tech fund accelerating cross-border expansion for SEA tech leaders.",
+            "products": ["SEA Horizon Fund", "Founder Syndicate"]
         },
         {
             "id": "c-innovate-hub",
             "name": "National Innovation Hub",
             "domain": "innovatehub.org.vn",
-            "industry": "Vườn ươm & Hỗ trợ Khởi nghiệp",
-            "size_range": "40-70 nhân viên",
-            "description": "Không gian làm việc chung, tổ chức sự kiện quốc tế và vườn ươm tài năng công nghệ trẻ.",
+            "industry": "Incubator & Innovation Center",
+            "size_range": "40-70 staff",
+            "description": "State-of-the-art incubation accelerator, B2B commercialization support, and ecosystem facility.",
             "products": ["Incubation Accelerator", "Coworking Pass"]
         }
     ]
@@ -145,8 +159,8 @@ def seed_database(db: Session, tenant_id: str = "tenant-demo-hub"):
             "size_range": cd["size_range"],
             "description": cd["description"],
             "key_products": cd["products"],
-            "headquarters": "Hà Nội / TP.HCM",
-            "sources": [{"title": "Google AI Studio Verified Grounding", "url": f"https://{cd['domain']}"}]
+            "headquarters": "Hanoi / HCMC / Singapore",
+            "sources": [{"title": "Google AI Studio Grounding", "url": f"https://{cd['domain']}"}]
         }
         comp = Company(
             id=cd["id"],
@@ -167,138 +181,93 @@ def seed_database(db: Session, tenant_id: str = "tenant-demo-hub"):
     persons_data = [
         {
             "id": "p-1",
-            "full_name": "Nguyễn Thanh Sơn",
-            "title": "Giám đốc Phát triển Kinh doanh (BD Director)",
+            "full_name": "Nguyen Thanh Son",
+            "title": "Director of Business Development",
             "company_id": "c-nextgen-ai",
             "email": "son.nguyen@nextgenai.vn",
-            "phone": "0912 345 678",
-            "events": [("ev-ai-riser-2026", "speaker"), ("ev-tech-night-2026", "attendee"), ("ev-danang-mixer-2025", "attendee")]
+            "phone": "+84 912 345 678",
+            "events": [("ev-ai-riser-2026", "speaker"), ("ev-tech-night-2026", "attendee"), ("ev-cloud-summit-2026", "speaker")]
         },
         {
             "id": "p-2",
-            "full_name": "Trần Thị Mai Anh",
-            "title": "Chief Executive Officer (CEO & Co-founder)",
+            "full_name": "Tran Thi Mai Anh",
+            "title": "Chief Executive Officer (CEO)",
             "company_id": "c-vinfinty-pay",
             "email": "maianh.tran@vinfinpay.com",
-            "phone": "0988 123 456",
-            "events": [("ev-ai-riser-2026", "speaker"), ("ev-tech-night-2026", "speaker")]
+            "phone": "+84 988 123 456",
+            "events": [("ev-ai-riser-2026", "speaker"), ("ev-fintech-expo-2026", "keynote"), ("ev-tech-night-2026", "speaker")]
         },
         {
             "id": "p-3",
-            "full_name": "Lê Hoàng Quân",
+            "full_name": "Le Hoang Quan",
             "title": "Senior AI Research Lead",
             "company_id": "c-nextgen-ai",
             "email": "quan.le@nextgenai.vn",
-            "phone": "0903 888 999",
-            "events": [("ev-ai-riser-2026", "speaker")]
+            "phone": "+84 903 888 999",
+            "events": [("ev-ai-riser-2026", "speaker"), ("ev-cloud-summit-2026", "speaker")]
         },
         {
             "id": "p-4",
-            "full_name": "Phạm Minh Đức",
-            "title": "Managing Partner / Investor",
+            "full_name": "Pham Minh Duc",
+            "title": "Managing Partner & Investor",
             "company_id": "c-dragon-vc",
             "email": "duc.pham@dragonvc.fund",
-            "phone": "0918 777 666",
+            "phone": "+84 918 777 666",
             "events": [("ev-ai-riser-2026", "vip"), ("ev-tech-night-2026", "sponsor"), ("ev-danang-mixer-2025", "speaker")]
         },
         {
             "id": "p-5",
-            "full_name": "Hoàng Bích Ngọc",
-            "title": "Head of Product",
-            "company_id": "c-edusmart",
-            "email": "ngoc.hoang@edusmart.edu.vn",
-            "phone": "0945 112 233",
-            "events": [("ev-tech-night-2026", "attendee"), ("ev-danang-mixer-2025", "attendee")]
+            "full_name": "Alex Chen",
+            "title": "General Partner",
+            "company_id": "c-nexus-sg",
+            "email": "alex.chen@nexusventures.sg",
+            "phone": "+65 8123 4567",
+            "events": [("ev-ai-riser-2026", "vip"), ("ev-danang-mixer-2025", "investor")]
         },
         {
             "id": "p-6",
-            "full_name": "Vũ Đăng Khoa",
-            "title": "Founder & CTO",
-            "company_id": "c-greenfuture",
-            "email": "khoa.vu@greenfuture.vn",
-            "phone": "0977 445 566",
-            "events": [("ev-ai-riser-2026", "attendee")]
+            "full_name": "Hoang Bich Ngoc",
+            "title": "VP of Product",
+            "company_id": "c-edusmart",
+            "email": "ngoc.hoang@edusmart.edu.vn",
+            "phone": "+84 945 112 233",
+            "events": [("ev-tech-night-2026", "attendee"), ("ev-danang-mixer-2025", "attendee")]
         },
         {
             "id": "p-7",
-            "full_name": "Đỗ Thu Trang",
-            "title": "Head of Partnership & Ecosystem",
-            "company_id": "c-innovate-hub",
-            "email": "trang.do@innovatehub.org.vn",
-            "phone": "0933 654 321",
-            "events": [("ev-ai-riser-2026", "organizer"), ("ev-tech-night-2026", "organizer"), ("ev-danang-mixer-2025", "organizer")]
+            "full_name": "Vu Dang Khoa",
+            "title": "Co-founder & CTO",
+            "company_id": "c-greenfuture",
+            "email": "khoa.vu@greenfuture.vn",
+            "phone": "+84 977 445 566",
+            "events": [("ev-ai-riser-2026", "attendee"), ("ev-cloud-summit-2026", "attendee")]
         },
         {
             "id": "p-8",
-            "full_name": "Bùi Quốc Hưng",
-            "title": "VP of Engineering",
-            "company_id": "c-cyberguard",
-            "email": "hung.bui@cyberguard.vn",
-            "phone": "0909 223 344",
-            "events": [("ev-tech-night-2026", "attendee")]
+            "full_name": "Do Thu Trang",
+            "title": "Head of Strategic Partnerships",
+            "company_id": "c-innovate-hub",
+            "email": "trang.do@innovatehub.org.vn",
+            "phone": "+84 933 654 321",
+            "events": [("ev-ai-riser-2026", "organizer"), ("ev-tech-night-2026", "organizer"), ("ev-danang-mixer-2025", "organizer")]
         },
         {
             "id": "p-9",
-            "full_name": "Nguyễn Hải Yến",
-            "title": "Chief Financial Officer (CFO)",
-            "company_id": "c-vinfinty-pay",
-            "email": "yen.nguyen@vinfinpay.com",
-            "phone": "0966 554 433",
-            "events": [("ev-tech-night-2026", "attendee")]
+            "full_name": "Bui Quoc Hung",
+            "title": "VP of Security Engineering",
+            "company_id": "c-cyberguard",
+            "email": "hung.bui@cyberguard.vn",
+            "phone": "+84 909 223 344",
+            "events": [("ev-tech-night-2026", "attendee"), ("ev-cloud-summit-2026", "panelist")]
         },
         {
             "id": "p-10",
-            "full_name": "Đặng Tuấn Kiệt",
-            "title": "Co-founder & Chief Architect",
-            "company_id": "c-agritrust",
-            "email": "kiet.dang@agritrust.vn",
-            "phone": "0982 334 455",
-            "events": [("ev-danang-mixer-2025", "speaker")]
-        },
-        {
-            "id": "p-11",
-            "full_name": "Lương Minh Tuấn",
-            "title": "Investment Associate",
-            "company_id": "c-dragon-vc",
-            "email": "tuan.luong@dragonvc.fund",
-            "phone": "0915 998 877",
-            "events": [("ev-ai-riser-2026", "attendee"), ("ev-tech-night-2026", "attendee")]
-        },
-        {
-            "id": "p-12",
-            "full_name": "Võ Thị Quỳnh Như",
-            "title": "AI Product Manager",
-            "company_id": "c-nextgen-ai",
-            "email": "nhu.vo@nextgenai.vn",
-            "phone": "0938 121 212",
-            "events": [("ev-ai-riser-2026", "attendee")]
-        },
-        {
-            "id": "p-13",
-            "full_name": "Hồ Gia Huy",
-            "title": "Operations Director",
-            "company_id": "c-edusmart",
-            "email": "huy.ho@edusmart.edu.vn",
-            "phone": "0971 789 789",
-            "events": [("ev-danang-mixer-2025", "attendee")]
-        },
-        {
-            "id": "p-14",
-            "full_name": "Phan Cẩm Tú",
-            "title": "Sustainability Consultant",
-            "company_id": "c-greenfuture",
-            "email": "tu.phan@greenfuture.vn",
-            "phone": "0908 678 901",
-            "events": [("ev-ai-riser-2026", "attendee")]
-        },
-        {
-            "id": "p-15",
-            "full_name": "Trịnh Công Hậu",
-            "title": "Security Specialist",
-            "company_id": "c-cyberguard",
-            "email": "hau.trinh@cyberguard.vn",
-            "phone": "0919 456 789",
-            "events": [("ev-tech-night-2026", "attendee")]
+            "full_name": "Nguyen Hai Yen",
+            "title": "Chief Financial Officer (CFO)",
+            "company_id": "c-vinfinty-pay",
+            "email": "yen.nguyen@vinfinpay.com",
+            "phone": "+84 966 554 433",
+            "events": [("ev-fintech-expo-2026", "panelist")]
         }
     ]
 
@@ -309,84 +278,127 @@ def seed_database(db: Session, tenant_id: str = "tenant-demo-hub"):
             title=pd["title"],
             email=pd["email"],
             phone=pd["phone"],
-            source_type="excel_import",
             tenant_id=tenant_id,
-            embedding_json=json.dumps(gemini_service.get_embedding(pd["full_name"]))
+            embedding_json=json.dumps(gemini_service.get_embedding(f"{pd['full_name']} {pd['title']}"))
         )
         db.add(p)
         db.flush()
 
         # Affiliation
-        if pd.get("company_id") and pd["company_id"] in companies_map:
-            aff = Affiliation(
-                person_id=p.id,
-                company_id=pd["company_id"],
-                title=pd["title"],
-                is_current=True
-            )
-            db.add(aff)
+        aff = Affiliation(
+            person_id=p.id,
+            company_id=pd["company_id"],
+            title=pd["title"],
+            is_current=True
+        )
+        db.add(aff)
 
         # Participations
-        for ev_id, role in pd.get("events", []):
-            if ev_id in events_map:
-                part = Participation(
-                    person_id=p.id,
-                    event_id=ev_id,
-                    role=role
-                )
-                db.add(part)
+        for ev_id, role in pd["events"]:
+            part = Participation(
+                person_id=p.id,
+                event_id=ev_id,
+                role=role
+            )
+            db.add(part)
 
-    # 5. Pre-populated Resolution Audit Logs (Demonstrating live Entity Resolution capability)
-    resolution_logs_data = [
+    # 5. Resolution Logs (Audit Trail & Pending Queue)
+    res_logs = [
         {
-            "entity_type": "person",
-            "source_name": "NGUYEN THANH SON",
-            "matched_candidate_id": "p-1",
-            "matched_candidate_name": "Nguyễn Thanh Sơn",
-            "similarity_score": 0.96,
-            "matched_rule": "same_company_email_domain + high_name_similarity_92%",
-            "decision": "auto_merged",
-            "explanation": "[Tự động gộp] Tương đồng tên 92% và cùng miền email công ty [@nextgenai.vn]. Đã đồng bộ lịch sử tham gia.",
-            "payload_data": json.dumps({"full_name": "NGUYEN THANH SON", "email": "son.nguyen@nextgenai.vn", "title": "BD Director", "source": "card_scan"})
-        },
-        {
-            "entity_type": "person",
-            "source_name": "Trần M. Anh",
-            "matched_candidate_id": "p-2",
-            "matched_candidate_name": "Trần Thị Mai Anh",
-            "similarity_score": 0.78,
-            "matched_rule": "same_company_email_domain + fuzzy_name_match",
+            "id": "res-demo-1",
+            "source_type": "card_ocr",
+            "source_name": "TechViet Solutions Ltd",
+            "entity_type": "company",
+            "matched_candidate_id": "c-nextgen-ai",
+            "matched_candidate_name": "NextGen AI Vietnam",
+            "similarity_score": 0.92,
+            "matched_rule": "Corporate Email Domain & Token Alignment",
             "decision": "pending",
-            "explanation": "[Chờ duyệt] Phát hiện trùng lặp tiềm năng (78%) với CEO VinFintech Payments do cùng miền email @vinfinpay.com.",
-            "payload_data": json.dumps({"full_name": "Trần M. Anh", "email": "maianh.tran@vinfinpay.com", "title": "CEO", "source": "excel_import"})
+            "explanation": "Matching domain 'nextgenai.vn' with 92% semantic cosine similarity between extracted organization entities.",
+            "payload_data": {
+                "external_id": "EXT-992-CRM",
+                "domain": "nextgenai.vn",
+                "address": "Floor 12, Keangnam Landmark 72, Hanoi",
+                "rep": "Nguyen Thanh Son",
+                "industry": "Artificial Intelligence & Analytics"
+            }
         },
         {
+            "id": "res-demo-2",
+            "source_type": "excel_import",
+            "source_name": "Son Nguyen Thanh (Son NT)",
             "entity_type": "person",
-            "source_name": "Đỗ Thu Trang",
-            "matched_candidate_id": "p-7",
-            "matched_candidate_name": "Đỗ Thu Trang",
-            "similarity_score": 0.99,
-            "matched_rule": "exact_email_match + exact_phone_match",
+            "matched_candidate_id": "p-1",
+            "matched_candidate_name": "Nguyen Thanh Son",
+            "similarity_score": 0.96,
+            "matched_rule": "Fuzzy Name Permutation & Phone Hash Match",
+            "decision": "pending",
+            "explanation": "High Jaro-Winkler string similarity (0.96) and exact match on mobile contact (+84 912 345 678).",
+            "payload_data": {
+                "external_id": "CSV-ROW-104",
+                "title": "BD Director",
+                "email": "son.nguyen@nextgenai.vn",
+                "phone": "+84 912 345 678",
+                "rep": "Nguyen Thanh Son",
+                "domain": "nextgenai.vn"
+            }
+        },
+        {
+            "id": "res-demo-3",
+            "source_type": "web_lead",
+            "source_name": "VinFin Payments JSC",
+            "entity_type": "company",
+            "matched_candidate_id": "c-vinfinty-pay",
+            "matched_candidate_name": "VinFintech Payments",
+            "similarity_score": 0.94,
+            "matched_rule": "Domain & Legal Name Suffix Rule",
             "decision": "auto_merged",
-            "explanation": "[Tự động gộp] Trùng khớp 100% email [trang.do@innovatehub.org.vn] và số điện thoại [0933 654 321].",
-            "payload_data": json.dumps({"full_name": "Đỗ Thu Trang", "email": "trang.do@innovatehub.org.vn", "title": "Head of Partnership", "source": "excel_import"})
+            "explanation": "Exact domain match 'vinfinpay.com' with stripped legal suffix 'JSC'.",
+            "payload_data": {"domain": "vinfinpay.com"}
+        },
+        {
+            "id": "res-demo-4",
+            "source_type": "event_checkin",
+            "source_name": "Mai Anh Tran (VinPay)",
+            "entity_type": "person",
+            "matched_candidate_id": "p-2",
+            "matched_candidate_name": "Tran Thi Mai Anh",
+            "similarity_score": 0.95,
+            "matched_rule": "Email & Organization Match",
+            "decision": "merged",
+            "explanation": "Corporate email match 'maianh.tran@vinfinpay.com' confirmed by operator.",
+            "payload_data": {"email": "maianh.tran@vinfinpay.com"}
+        },
+        {
+            "id": "res-demo-5",
+            "source_type": "card_ocr",
+            "source_name": "Arthur Vance Advisory",
+            "entity_type": "company",
+            "matched_candidate_id": None,
+            "matched_candidate_name": None,
+            "similarity_score": 0.38,
+            "matched_rule": "Novel Entity Isolation Rule",
+            "decision": "split",
+            "explanation": "No existing candidate exceeded threshold (score 0.38 < 0.60). Isolated as distinct entity.",
+            "payload_data": {"name": "Arthur Vance Advisory"}
         }
     ]
 
-    for rld in resolution_logs_data:
-        r_log = ResolutionLog(
-            entity_type=rld["entity_type"],
-            source_name=rld["source_name"],
-            matched_candidate_id=rld["matched_candidate_id"],
-            matched_candidate_name=rld["matched_candidate_name"],
-            similarity_score=rld["similarity_score"],
-            matched_rule=rld["matched_rule"],
-            decision=rld["decision"],
-            explanation=rld["explanation"],
-            payload_data=rld["payload_data"],
-            tenant_id=tenant_id
+    for rl in res_logs:
+        log_obj = ResolutionLog(
+            id=rl["id"],
+            tenant_id=tenant_id,
+            source_name=rl["source_name"],
+            entity_type=rl["entity_type"],
+            matched_candidate_id=rl["matched_candidate_id"],
+            matched_candidate_name=rl["matched_candidate_name"],
+            similarity_score=rl["similarity_score"],
+            matched_rule=rl["matched_rule"],
+            decision=rl["decision"],
+            explanation=rl["explanation"],
+            payload_data=json.dumps(rl["payload_data"], ensure_ascii=False)
         )
-        db.add(r_log)
+        db.add(log_obj)
 
     db.commit()
-    logger.info("Successfully seeded EventGraph database with realistic Vietnamese ecosystem data.")
+    logger.info("Successfully seeded high-density enterprise ecosystem data.")
