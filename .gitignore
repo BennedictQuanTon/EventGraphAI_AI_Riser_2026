@@ -48,3 +48,8 @@ serviceAccountKey.json
 
 # Antigravity artifacts
 .gemini/
+.agents/
+
+# Markdown scratch & internal planning files (keep README.md)
+*.md
+!README.md
