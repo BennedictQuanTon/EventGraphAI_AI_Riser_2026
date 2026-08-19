@@ -11,8 +11,7 @@ import SettingsView from './components/SettingsView';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [activeSubTab, setActiveSubTab] = useState('workspace');
-  const [tenantInfo, setTenantInfo] = useState({ tenant_name: 'Enterprise Innovation Node 01' });
+  const [tenantInfo, setTenantInfo] = useState({ tenant_name: 'Enterprise Node 01' });
   const [queueCount, setQueueCount] = useState(12);
   const [isResetting, setIsResetting] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -24,10 +23,10 @@ export default function App() {
   const loadTenantAndQueue = async () => {
     try {
       const [tRes, qRes] = await Promise.all([
-        api.getCurrentTenant().catch(() => ({ tenant_name: 'Enterprise Innovation Node 01' })),
+        api.getCurrentTenant().catch(() => ({ tenant_name: 'Enterprise Node 01' })),
         api.getResolutionQueue().catch(() => [])
       ]);
-      setTenantInfo(tRes || { tenant_name: 'Enterprise Innovation Node 01' });
+      setTenantInfo(tRes || { tenant_name: 'Enterprise Node 01' });
       setQueueCount(qRes?.length || 12);
     } catch (e) {
       console.error(e);
@@ -51,14 +50,6 @@ export default function App() {
     }
   };
 
-  // Handle header sub-tab changes
-  const handleSelectSubTab = (tab) => {
-    setActiveSubTab(tab);
-    if (tab === 'workspace') setActiveTab('dashboard');
-    if (tab === 'network') setActiveTab('graph');
-    if (tab === 'audit') setActiveTab('resolutions');
-  };
-
   return (
     <div className="app-layout">
       {/* Left Sidebar */}
@@ -70,13 +61,11 @@ export default function App() {
         queueCount={queueCount}
       />
 
-      {/* Main Content Area */}
+      {/* Main Content Viewport */}
       <main className="main-viewport">
         <div className="content-body">
-          {/* Top Header */}
+          {/* Unified Clean Top Header */}
           <Header
-            activeSubTab={activeSubTab}
-            onSelectSubTab={handleSelectSubTab}
             tenantName={tenantInfo.tenant_name}
             onOpenScan={() => setActiveTab('intelligence')}
             onOpenTenantSwitcher={() => setActiveTab('settings')}
@@ -84,7 +73,7 @@ export default function App() {
             onSearchChange={setSearchQuery}
           />
 
-          {/* Active View Container */}
+          {/* Active View */}
           <div style={{ transition: 'opacity 0.15s ease-in-out' }}>
             {activeTab === 'dashboard' && (
               <OverviewView
