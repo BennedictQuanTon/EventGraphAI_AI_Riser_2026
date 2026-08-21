@@ -664,46 +664,41 @@ export default function GraphView() {
 
       {/* Collapsible Filter Panel Top Left */}
       {!isFilterOpen ? (
-        // Sleek Compact Collapsed Button (Does not obstruct canvas)
+        // Minimalist Icon-Only Filter Button (Bigger Logo Icon, No Text)
         <button
           onClick={() => setIsFilterOpen(true)}
+          title="Filter Graph Dataset"
           style={{
             position: 'absolute',
             top: '20px',
             left: '20px',
+            width: '46px',
+            height: '46px',
             backgroundColor: '#FFFFFF',
             border: '1px solid var(--border-color)',
             borderRadius: '12px',
-            padding: '10px 16px',
             boxShadow: 'var(--shadow-md)',
             display: 'flex',
             alignItems: 'center',
-            gap: '10px',
+            justifyContent: 'center',
             cursor: 'pointer',
             zIndex: 10,
             transition: 'all 0.2s ease'
           }}
         >
-          <div style={{
-            width: '28px',
-            height: '28px',
-            borderRadius: '8px',
-            backgroundColor: isFilterActive ? 'var(--primary-light)' : 'var(--bg-muted)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            <Filter size={16} color="var(--primary)" />
-          </div>
-          <div style={{ textAlign: 'left' }}>
-            <div style={{ fontSize: '13.5px', fontWeight: '800', color: 'var(--text-main)' }}>
-              Filter Dataset
-            </div>
-            <div style={{ fontSize: '11px', color: isFilterActive ? 'var(--primary)' : 'var(--text-light)', fontWeight: isFilterActive ? '700' : '500' }}>
-              {isFilterActive ? `Active: ${matchedNodesCount} Matched` : 'All Entities (14)'}
-            </div>
-          </div>
-          <ChevronDown size={17} color="var(--text-muted)" style={{ marginLeft: '4px' }} />
+          <Filter size={22} color={isFilterActive ? "var(--secondary)" : "var(--primary)"} />
+          {isFilterActive && (
+            <span style={{
+              position: 'absolute',
+              top: '6px',
+              right: '6px',
+              width: '9px',
+              height: '9px',
+              borderRadius: '50%',
+              backgroundColor: 'var(--secondary)',
+              border: '2px solid #FFFFFF'
+            }} />
+          )}
         </button>
       ) : (
         // Expanded Filter Card with Collapse Toggle Button
