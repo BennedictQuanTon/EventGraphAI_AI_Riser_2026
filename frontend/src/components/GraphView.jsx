@@ -16,7 +16,9 @@ import {
   ShieldCheck, 
   Maximize2,
   Check,
-  RefreshCw
+  ChevronDown,
+  ChevronUp,
+  SlidersHorizontal
 } from 'lucide-react';
 
 export default function GraphView() {
@@ -26,10 +28,11 @@ export default function GraphView() {
   const [selectedEvent, setSelectedEvent] = useState('all');
   const [activeFilter, setActiveFilter] = useState({ industry: 'all', event: 'all' });
   const [selectedNode, setSelectedNode] = useState(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false); // Collapsible filter state (starts sleek)
 
   // Full Rich Master Nodes Dataset Covering All Filter Options
   const masterNodes = [
-    // Center Event Hubs
+    // 1. Center Main Event Hub
     { 
       id: 'e1', 
       label: 'AI Riser Demo Day 2026', 
@@ -47,7 +50,7 @@ export default function GraphView() {
       id: 'e2', 
       label: 'Tech Networking Night', 
       type: 'event', 
-      x: 200, 
+      x: 220, 
       y: -300, 
       radius: 34, 
       venue: 'The Loop HCMC', 
@@ -57,7 +60,7 @@ export default function GraphView() {
       industry: 'all'
     },
     
-    // 1. Artificial Intelligence & DeepTech Cluster
+    // 2. Artificial Intelligence & DeepTech Cluster (Top Left)
     { 
       id: 'c1', 
       label: 'NextGen AI Vietnam', 
@@ -99,7 +102,7 @@ export default function GraphView() {
       events: ['all', 'ai_riser']
     },
 
-    // 2. Financial Technology (FinTech) Cluster
+    // 3. Financial Technology (FinTech) Cluster (Top Right)
     { 
       id: 'c2', 
       label: 'VinFintech Payments', 
@@ -141,7 +144,7 @@ export default function GraphView() {
       events: ['all', 'tech_night', 'fintech_expo']
     },
 
-    // 3. Venture Capital & Funds Cluster
+    // 4. Venture Capital & Funds Cluster (Bottom)
     { 
       id: 'c3', 
       label: 'Dragon Venture Capital', 
@@ -195,7 +198,7 @@ export default function GraphView() {
       events: ['all', 'ai_riser', 'tech_night']
     },
 
-    // 4. Incubation & Ecosystem Hub
+    // 5. Incubation & Ecosystem Hub (Top Center)
     { 
       id: 'c5', 
       label: 'National Innovation Hub', 
@@ -203,7 +206,7 @@ export default function GraphView() {
       industry: 'incubation', 
       industryLabel: 'Incubation & Ecosystem',
       domain: 'innovatehub.org.vn', 
-      x: -60, 
+      x: -40, 
       y: -280, 
       radius: 34,
       events: ['all', 'ai_riser', 'tech_night', 'sea_summit']
@@ -217,13 +220,13 @@ export default function GraphView() {
       industry: 'incubation',
       avatar: 'TT', 
       email: 'trang.do@innovatehub.org.vn', 
-      x: 60, 
+      x: 80, 
       y: -320, 
       radius: 25,
       events: ['all', 'ai_riser', 'sea_summit']
     },
 
-    // 5. GreenTech & Cybersecurity Nodes
+    // 6. GreenTech & Cybersecurity Nodes (Bottom Center)
     { 
       id: 'p7', 
       label: 'Vu Dang Khoa', 
@@ -233,7 +236,7 @@ export default function GraphView() {
       industry: 'greentech',
       avatar: 'VK', 
       email: 'khoa.vu@greenfuture.vn', 
-      x: -160, 
+      x: -150, 
       y: 300, 
       radius: 25,
       events: ['all', 'ai_riser']
@@ -247,7 +250,7 @@ export default function GraphView() {
       industry: 'cybersecurity',
       avatar: 'BH', 
       email: 'hung.bui@cyberguard.vn', 
-      x: 160, 
+      x: 150, 
       y: 300, 
       radius: 25,
       events: ['all', 'ai_riser', 'tech_night']
@@ -293,10 +296,10 @@ export default function GraphView() {
     lastMouse: { x: 0, y: 0 }
   });
 
-  // Filter Helper: Check if node matches active filter criteria
+  // Filter Matching Helper
   const isNodeMatching = useCallback((node) => {
     const { industry, event } = activeFilter;
-    const matchIndustry = industry === 'all' || node.industry === industry || (node.type === 'event');
+    const matchIndustry = industry === 'all' || node.industry === industry || node.type === 'event';
     const matchEvent = event === 'all' || (node.events && node.events.includes(event));
     return matchIndustry && matchEvent;
   }, [activeFilter]);
@@ -334,7 +337,7 @@ export default function GraphView() {
       }
     }
 
-    // 2. Draw Edges
+    // 2. Draw Edges with Directional Lines & Labels
     links.forEach(l => {
       const source = nodeMap.get(l.source);
       const target = nodeMap.get(l.target);
@@ -353,7 +356,7 @@ export default function GraphView() {
       ctx.moveTo(source.x, source.y);
       ctx.lineTo(target.x, target.y);
       ctx.strokeStyle = l.dashed ? '#CBD5E1' : l.color || '#0052CC';
-      ctx.lineWidth = edgeMatches && isFilterActive ? 3.2 : l.dashed ? 1.8 : 2.5;
+      ctx.lineWidth = edgeMatches && isFilterActive ? 3.2 : l.dashed ? 1.8 : 2.4;
       if (l.dashed) {
         ctx.setLineDash([5, 5]);
       } else {
@@ -362,7 +365,7 @@ export default function GraphView() {
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Edge Relationship Pill Label
+      // Edge Relationship Pill Label (Crisp & High Contrast)
       if (l.label && camera.zoom > 0.6) {
         const midX = (source.x + target.x) / 2;
         const midY = (source.y + target.y) / 2;
@@ -371,13 +374,13 @@ export default function GraphView() {
 
         ctx.fillStyle = '#FFFFFF';
         ctx.strokeStyle = edgeMatches && isFilterActive ? '#0052CC' : '#CBD5E1';
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 1.2;
         ctx.beginPath();
         ctx.roundRect(midX - labelWidth / 2 - 6, midY - 10, labelWidth + 12, 20, 5);
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = edgeMatches && isFilterActive ? '#0052CC' : '#475569';
+        ctx.fillStyle = edgeMatches && isFilterActive ? '#0052CC' : '#334155';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(l.label, midX, midY);
@@ -464,23 +467,25 @@ export default function GraphView() {
         ctx.fillText(n.avatar || 'EX', n.x, n.y);
       }
 
-      // 4. Clean Distinct Node Label Pill
-      const labelY = n.y + n.radius + 18;
-      ctx.font = isSelected ? '800 14px Plus Jakarta Sans, sans-serif' : '700 13.5px Plus Jakarta Sans, sans-serif';
-      const labelWidth = ctx.measureText(n.label).width;
+      // 4. Clean Distinct Node Label Pill (Always has clear content)
+      if (n.label && n.label.trim()) {
+        const labelY = n.y + n.radius + 18;
+        ctx.font = isSelected ? '800 14px Plus Jakarta Sans, sans-serif' : '700 13.5px Plus Jakarta Sans, sans-serif';
+        const labelWidth = ctx.measureText(n.label).width;
 
-      ctx.fillStyle = '#FFFFFF';
-      ctx.strokeStyle = isSelected ? '#0052CC' : matches && isFilterActive ? '#0052CC' : '#CBD5E1';
-      ctx.lineWidth = isSelected ? 2 : matches && isFilterActive ? 1.8 : 1.2;
-      ctx.beginPath();
-      ctx.roundRect(n.x - labelWidth / 2 - 10, labelY - 12, labelWidth + 20, 24, 6);
-      ctx.fill();
-      ctx.stroke();
+        ctx.fillStyle = '#FFFFFF';
+        ctx.strokeStyle = isSelected ? '#0052CC' : matches && isFilterActive ? '#0052CC' : '#CBD5E1';
+        ctx.lineWidth = isSelected ? 2 : matches && isFilterActive ? 1.8 : 1.2;
+        ctx.beginPath();
+        ctx.roundRect(n.x - labelWidth / 2 - 10, labelY - 12, labelWidth + 20, 24, 6);
+        ctx.fill();
+        ctx.stroke();
 
-      ctx.fillStyle = isSelected ? '#0052CC' : matches && isFilterActive ? '#0052CC' : '#0F172A';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(n.label, n.x, labelY);
+        ctx.fillStyle = isSelected ? '#0052CC' : matches && isFilterActive ? '#0052CC' : '#0F172A';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(n.label, n.x, labelY);
+      }
 
       ctx.restore();
     });
@@ -610,7 +615,6 @@ export default function GraphView() {
     e?.preventDefault();
     setActiveFilter({ industry: selectedIndustry, event: selectedEvent });
 
-    // Focus camera onto center or filtered nodes
     if (selectedIndustry === 'fintech') {
       graphState.current.camera = { x: -140, y: 30, zoom: 1.15 };
     } else if (selectedIndustry === 'ai') {
@@ -631,7 +635,6 @@ export default function GraphView() {
     setTimeout(drawGraph, 50);
   };
 
-  // Count matched entities
   const matchedNodesCount = masterNodes.filter(n => isNodeMatching(n)).length;
   const isFilterActive = activeFilter.industry !== 'all' || activeFilter.event !== 'all';
 
@@ -659,105 +662,181 @@ export default function GraphView() {
         style={{ width: '100%', height: '100%', display: 'block', cursor: 'grab' }}
       />
 
-      {/* Floating Filter Dataset Panel Top Left */}
-      <div style={{
-        position: 'absolute',
-        top: '24px',
-        left: '24px',
-        width: '320px',
-        backgroundColor: '#FFFFFF',
-        border: '1px solid var(--border-color)',
-        borderRadius: '16px',
-        padding: '22px',
-        boxShadow: 'var(--shadow-md)',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px',
-        zIndex: 10
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Filter size={20} color="var(--primary)" />
-            <h4 style={{ fontSize: '17px', fontWeight: '800', color: 'var(--text-main)' }}>
-              Filter Graph Dataset
-            </h4>
-          </div>
-          {isFilterActive && (
-            <button 
-              onClick={handleClearFilter}
-              className="btn btn-subtle" 
-              style={{ fontSize: '12px', padding: '2px 6px', color: 'var(--danger)' }}
-            >
-              Reset
-            </button>
-          )}
-        </div>
-
-        <div>
-          <label style={{ fontSize: '13.5px', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
-            Industry Sector:
-          </label>
-          <select 
-            value={selectedIndustry} 
-            onChange={(e) => setSelectedIndustry(e.target.value)}
-            className="input-enterprise" 
-            style={{ fontSize: '14px', padding: '9px 12px' }}
-          >
-            <option value="all">All Industries (3,105)</option>
-            <option value="ai">Artificial Intelligence & DeepTech</option>
-            <option value="fintech">Financial Technology (FinTech)</option>
-            <option value="vc">Venture Capital & Funds</option>
-            <option value="greentech">GreenTech & ESG</option>
-            <option value="cybersecurity">Cybersecurity Infrastructure</option>
-            <option value="incubation">Incubation & Ecosystem Hubs</option>
-          </select>
-        </div>
-
-        <div>
-          <label style={{ fontSize: '13.5px', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
-            Summit / Event Participation:
-          </label>
-          <select 
-            value={selectedEvent} 
-            onChange={(e) => setSelectedEvent(e.target.value)}
-            className="input-enterprise" 
-            style={{ fontSize: '14px', padding: '9px 12px' }}
-          >
-            <option value="all">All Summits (142)</option>
-            <option value="ai_riser">AI Riser Vietnam Demo Day 2026</option>
-            <option value="tech_night">Tech Networking Night Q2/2026</option>
-            <option value="sea_summit">SEA Startup Summit 2025</option>
-            <option value="fintech_expo">Vietnam FinTech Expo 2026</option>
-          </select>
-        </div>
-
-        <button 
-          onClick={handleApplyFilter}
-          className="btn btn-primary" 
-          style={{ width: '100%', padding: '11px', fontSize: '14.5px', marginTop: '4px' }}
-        >
-          <Check size={16} />
-          <span>Apply Active Filter</span>
-        </button>
-
-        {isFilterActive && (
-          <div style={{
-            padding: '10px 12px',
-            borderRadius: '10px',
-            backgroundColor: 'var(--primary-light)',
-            border: '1px solid var(--primary-border)',
-            fontSize: '12.5px',
-            color: 'var(--primary)',
-            fontWeight: '700',
+      {/* Collapsible Filter Panel Top Left */}
+      {!isFilterOpen ? (
+        // Sleek Compact Collapsed Button (Does not obstruct canvas)
+        <button
+          onClick={() => setIsFilterOpen(true)}
+          style={{
+            position: 'absolute',
+            top: '20px',
+            left: '20px',
+            backgroundColor: '#FFFFFF',
+            border: '1px solid var(--border-color)',
+            borderRadius: '12px',
+            padding: '10px 16px',
+            boxShadow: 'var(--shadow-md)',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between'
+            gap: '10px',
+            cursor: 'pointer',
+            zIndex: 10,
+            transition: 'all 0.2s ease'
+          }}
+        >
+          <div style={{
+            width: '28px',
+            height: '28px',
+            borderRadius: '8px',
+            backgroundColor: isFilterActive ? 'var(--primary-light)' : 'var(--bg-muted)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}>
-            <span>✨ Showing {matchedNodesCount} Matched Nodes</span>
-            <span style={{ fontSize: '11px', textDecoration: 'underline', cursor: 'pointer' }} onClick={handleClearFilter}>Clear</span>
+            <Filter size={16} color="var(--primary)" />
           </div>
-        )}
-      </div>
+          <div style={{ textAlign: 'left' }}>
+            <div style={{ fontSize: '13.5px', fontWeight: '800', color: 'var(--text-main)' }}>
+              Filter Dataset
+            </div>
+            <div style={{ fontSize: '11px', color: isFilterActive ? 'var(--primary)' : 'var(--text-light)', fontWeight: isFilterActive ? '700' : '500' }}>
+              {isFilterActive ? `Active: ${matchedNodesCount} Matched` : 'All Entities (14)'}
+            </div>
+          </div>
+          <ChevronDown size={17} color="var(--text-muted)" style={{ marginLeft: '4px' }} />
+        </button>
+      ) : (
+        // Expanded Filter Card with Collapse Toggle Button
+        <div style={{
+          position: 'absolute',
+          top: '20px',
+          left: '20px',
+          width: '320px',
+          backgroundColor: '#FFFFFF',
+          border: '1px solid var(--border-color)',
+          borderRadius: '16px',
+          padding: '22px',
+          boxShadow: 'var(--shadow-lg)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '16px',
+          zIndex: 10,
+          animation: 'fadeIn 0.18s ease'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Filter size={20} color="var(--primary)" />
+              <h4 style={{ fontSize: '17px', fontWeight: '800', color: 'var(--text-main)' }}>
+                Filter Graph Dataset
+              </h4>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              {isFilterActive && (
+                <button 
+                  onClick={handleClearFilter}
+                  className="btn btn-subtle" 
+                  style={{ fontSize: '12px', padding: '2px 6px', color: 'var(--danger)' }}
+                >
+                  Reset
+                </button>
+              )}
+              {/* Collapse Button */}
+              <button 
+                onClick={() => setIsFilterOpen(false)}
+                title="Collapse Filter Panel"
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: '4px',
+                  borderRadius: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--text-muted)'
+                }}
+              >
+                <ChevronUp size={20} />
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label style={{ fontSize: '13.5px', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
+              Industry Sector:
+            </label>
+            <select 
+              value={selectedIndustry} 
+              onChange={(e) => setSelectedIndustry(e.target.value)}
+              className="input-enterprise" 
+              style={{ fontSize: '14px', padding: '9px 12px' }}
+            >
+              <option value="all">All Industries (3,105)</option>
+              <option value="ai">Artificial Intelligence & DeepTech</option>
+              <option value="fintech">Financial Technology (FinTech)</option>
+              <option value="vc">Venture Capital & Funds</option>
+              <option value="greentech">GreenTech & ESG</option>
+              <option value="cybersecurity">Cybersecurity Infrastructure</option>
+              <option value="incubation">Incubation & Ecosystem Hubs</option>
+            </select>
+          </div>
+
+          <div>
+            <label style={{ fontSize: '13.5px', fontWeight: '700', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
+              Summit / Event Participation:
+            </label>
+            <select 
+              value={selectedEvent} 
+              onChange={(e) => setSelectedEvent(e.target.value)}
+              className="input-enterprise" 
+              style={{ fontSize: '14px', padding: '9px 12px' }}
+            >
+              <option value="all">All Summits (142)</option>
+              <option value="ai_riser">AI Riser Vietnam Demo Day 2026</option>
+              <option value="tech_night">Tech Networking Night Q2/2026</option>
+              <option value="sea_summit">SEA Startup Summit 2025</option>
+              <option value="fintech_expo">Vietnam FinTech Expo 2026</option>
+            </select>
+          </div>
+
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button 
+              onClick={handleApplyFilter}
+              className="btn btn-primary" 
+              style={{ flex: 1, padding: '11px', fontSize: '14px' }}
+            >
+              <Check size={16} />
+              <span>Apply Filter</span>
+            </button>
+            <button 
+              onClick={() => setIsFilterOpen(false)}
+              className="btn btn-outline" 
+              style={{ padding: '11px 14px', fontSize: '14px' }}
+              title="Hide Filter Card"
+            >
+              Hide
+            </button>
+          </div>
+
+          {isFilterActive && (
+            <div style={{
+              padding: '10px 12px',
+              borderRadius: '10px',
+              backgroundColor: 'var(--primary-light)',
+              border: '1px solid var(--primary-border)',
+              fontSize: '12.5px',
+              color: 'var(--primary)',
+              fontWeight: '700',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <span>✨ {matchedNodesCount} Nodes Matched</span>
+              <span style={{ fontSize: '11.5px', textDecoration: 'underline', cursor: 'pointer' }} onClick={handleClearFilter}>Clear</span>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Floating Zoom & Pan Controls Bottom Left */}
       <div style={{
