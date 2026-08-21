@@ -1,0 +1,68 @@
+{
+  "use_case": "UC-03: Google Search Grounding Corporate Intelligence",
+  "version": "2.0.0",
+  "description": "Benchmark verification dataset for Google Search Grounding outputs",
+  "grounded_entities": [
+    {
+      "name": "NextGen AI Vietnam",
+      "canonical_name": "NextGen AI Solutions (Vietnam) Co., Ltd.",
+      "domain": "nextgenai.vn",
+      "industry": "Artificial Intelligence & DeepTech",
+      "size_range": "50-100 employees",
+      "headquarters": "Keangnam Landmark 72, Hanoi & Landmark 81, HCMC",
+      "founded_year": "2021",
+      "description": "Enterprise multimodal AI platform developing automated OCR pipelines, neural entity resolution engines, and graph analytics for Tier-1 financial institutions.",
+      "key_products": [
+        "GenAI Enterprise Suite",
+        "Vision OCR Pipeline",
+        "Graph Entity Resolver",
+        "Automated Compliance Engine"
+      ],
+      "sources": [
+        { "title": "National Business Portal & Official Registry", "url": "https://dangkydoanhnghiep.gov.vn" },
+        { "title": "Official Company Website", "url": "https://nextgenai.vn" }
+      ],
+      "confidence_score": 0.98
+    },
+    {
+      "name": "VinFintech Payments",
+      "canonical_name": "VinFintech Payments JSC",
+      "domain": "vinfintech.com",
+      "industry": "Financial Technology (FinTech)",
+      "size_range": "100-250 employees",
+      "headquarters": "The Loop Hub, District 1, Ho Chi Minh City",
+      "founded_year": "2019",
+      "description": "Next-generation B2B payment gateway and automated cross-border reconciliation platform for Southeast Asian merchants.",
+      "key_products": [
+        "VinFin Core Gateway",
+        "B2B Payment Settlement Engine",
+        "Merchant AI Fraud Shield"
+      ],
+      "sources": [
+        { "title": "State Bank of Vietnam FinTech Directory", "url": "https://sbv.gov.vn" },
+        { "title": "VinFintech Corporate Portal", "url": "https://vinfintech.com" }
+      ],
+      "confidence_score": 0.96
+    },
+    {
+      "name": "Dragon Venture Capital",
+      "canonical_name": "Dragon VC Management LLC",
+      "domain": "dragonvc.co",
+      "industry": "Venture Capital & Funds",
+      "size_range": "15-30 investment partners",
+      "headquarters": "Danang Innovation Hub & Silicon Valley",
+      "founded_year": "2018",
+      "description": "Early-stage venture capital firm investing in high-growth DeepTech, AI, and B2B SaaS startups across Vietnam and Southeast Asia.",
+      "key_products": [
+        "Dragon Early Seed Fund I",
+        "Dragon DeepTech Growth Fund II",
+        "Founder Accelerator Program"
+      ],
+      "sources": [
+        { "title": "Dragon VC Official Portfolio", "url": "https://dragonvc.co" },
+        { "title": "TechInAsia SEA Investor Database", "url": "https://techinasia.com" }
+      ],
+      "confidence_score": 0.97
+    }
+  ]
+}

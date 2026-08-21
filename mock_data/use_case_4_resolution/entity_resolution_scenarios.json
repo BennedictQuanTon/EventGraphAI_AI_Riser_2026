@@ -1,0 +1,80 @@
+{
+  "use_case": "UC-04: Explainable Entity Resolution & Deduplication Rules",
+  "version": "2.0.0",
+  "description": "Benchmark scenarios for testing cosine embedding, Jaro-Winkler fuzzy name matching, and legal suffix normalization rules",
+  "test_scenarios": [
+    {
+      "scenario_id": "RES-CASE-001",
+      "test_name": "Domain Alignment & Headquarter Overlap Match",
+      "incoming_entity": {
+        "type": "company",
+        "name": "TechViet Solutions Ltd (NextGen AI)",
+        "domain": "nextgenai.vn",
+        "address": "Floor 12, Keangnam Landmark 72, Hanoi",
+        "rep": "Nguyen Thanh Son"
+      },
+      "canonical_candidate": {
+        "id": "c1",
+        "name": "NextGen AI Vietnam",
+        "domain": "nextgenai.vn",
+        "address": "Keangnam Landmark 72, Hanoi"
+      },
+      "expected_similarity_min": 0.90,
+      "expected_rule": "Corporate Email Domain & Token Alignment",
+      "expected_recommendation": "MERGE"
+    },
+    {
+      "scenario_id": "RES-CASE-002",
+      "test_name": "Fuzzy Name Transposition & Exact Phone Match",
+      "incoming_entity": {
+        "type": "person",
+        "name": "Son Nguyen Thanh",
+        "email": "son.nguyen@nextgenai.vn",
+        "phone": "+84 912 345 678",
+        "company": "NextGen AI Vietnam"
+      },
+      "canonical_candidate": {
+        "id": "p1",
+        "name": "Nguyen Thanh Son",
+        "email": "son.nguyen@nextgenai.vn",
+        "phone": "+84 912 345 678"
+      },
+      "expected_similarity_min": 0.95,
+      "expected_rule": "Fuzzy Name Permutation & Phone Hash Match",
+      "expected_recommendation": "MERGE"
+    },
+    {
+      "scenario_id": "RES-CASE-003",
+      "test_name": "Legal Suffix Normalization Rule",
+      "incoming_entity": {
+        "type": "company",
+        "name": "VinFin Payments JSC",
+        "domain": "vinfintech.com",
+        "address": "District 1, Ho Chi Minh City"
+      },
+      "canonical_candidate": {
+        "id": "c2",
+        "name": "VinFintech Payments",
+        "domain": "vinfintech.com",
+        "address": "The Loop Hub, District 1, HCMC"
+      },
+      "expected_similarity_min": 0.92,
+      "expected_rule": "Legal Suffix Normalization & Domain Rule",
+      "expected_recommendation": "MERGE"
+    },
+    {
+      "scenario_id": "RES-CASE-004",
+      "test_name": "Novel Entity Isolation Rule",
+      "incoming_entity": {
+        "type": "company",
+        "name": "Arthur Vance Advisory Group",
+        "domain": "vanceadvisory.com",
+        "address": "District 1, HCMC"
+      },
+      "canonical_candidate": null,
+      "expected_similarity_max": 0.45,
+      "expected_rule": "Novel Entity Isolation Rule",
+      "expected_recommendation": "SPLIT"
+    }
+  ]
+}

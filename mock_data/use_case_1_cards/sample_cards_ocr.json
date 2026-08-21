@@ -1,0 +1,83 @@
+{
+  "use_case": "UC-01: Multimodal Physical Business Card Vision Ingestion",
+  "version": "2.0.0",
+  "description": "Ground truth benchmark dataset for Google Gemini Multimodal Vision OCR extraction across physical business cards",
+  "benchmark_cards": [
+    {
+      "card_id": "CARD-001",
+      "image_ref": "/assets/cards/card_nextgen.jpg",
+      "expected_extraction": {
+        "full_name": "Tran Duc Anh",
+        "title": "Executive Director",
+        "company": "NextGen AI Solutions (Vietnam) Co., Ltd.",
+        "email": "duc.anh@nextgenai.vn",
+        "phone": "+84 901 234 567",
+        "address": "Landmark 81, HCMC, Vietnam",
+        "domain": "nextgenai.vn",
+        "industry": "Artificial Intelligence & DeepTech"
+      },
+      "validation_rules": {
+        "require_bilingual_name": true,
+        "require_vietnam_phone_code": true,
+        "min_ocr_confidence": 0.95
+      }
+    },
+    {
+      "card_id": "CARD-002",
+      "image_ref": "/assets/cards/card_vinfin.jpg",
+      "expected_extraction": {
+        "full_name": "Alex Carter",
+        "title": "Co-Founder & CEO",
+        "company": "VinFintech Payments",
+        "email": "alex.carter@vinfintech.com",
+        "phone": "+1 (212) 555-0199",
+        "address": "150 Financial District, NYC 10005",
+        "domain": "vinfintech.com",
+        "industry": "Financial Technology (FinTech)"
+      },
+      "validation_rules": {
+        "require_bilingual_name": false,
+        "require_vietnam_phone_code": false,
+        "min_ocr_confidence": 0.95
+      }
+    },
+    {
+      "card_id": "CARD-003",
+      "image_ref": "/assets/cards/card_dragon.jpg",
+      "expected_extraction": {
+        "full_name": "Alexander Chen",
+        "title": "Partner | Founder",
+        "company": "Dragon Venture Capital",
+        "email": "alex.chen@dragonvc.co",
+        "phone": "+1 (650) 555-0188",
+        "address": "Silicon Valley / Danang Innovation Hub",
+        "domain": "dragonvc.co",
+        "industry": "Venture Capital & Funds"
+      },
+      "validation_rules": {
+        "require_bilingual_name": false,
+        "require_vietnam_phone_code": false,
+        "min_ocr_confidence": 0.95
+      }
+    },
+    {
+      "card_id": "CARD-004",
+      "image_ref": "/assets/cards/card_nexus.jpg",
+      "expected_extraction": {
+        "full_name": "Sarah Jenkins",
+        "title": "Managing Partner",
+        "company": "Nexus Ventures",
+        "email": "sarah@nexusventures.co",
+        "phone": "+1 (555) 123-4567",
+        "address": "450 Tech Way, SF, CA",
+        "domain": "nexusventures.co",
+        "industry": "Venture Capital & Funds"
+      },
+      "validation_rules": {
+        "require_bilingual_name": false,
+        "require_vietnam_phone_code": false,
+        "min_ocr_confidence": 0.95
+      }
+    }
+  ]
+}

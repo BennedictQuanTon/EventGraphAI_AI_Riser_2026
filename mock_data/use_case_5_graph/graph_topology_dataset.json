@@ -1,0 +1,20 @@
+{
+  "use_case": "UC-05: Graph Topology Multi-Filter Benchmark",
+  "version": "2.0.0",
+  "description": "Multi-dimensional graph nodes and edges for testing Industry and Event filters",
+  "industries_available": [
+    { "id": "all", "label": "All Industries (3,105)" },
+    { "id": "ai", "label": "Artificial Intelligence & DeepTech", "expected_nodes_count": 4 },
+    { "id": "fintech", "label": "Financial Technology (FinTech)", "expected_nodes_count": 3 },
+    { "id": "vc", "label": "Venture Capital & Funds", "expected_nodes_count": 4 },
+    { "id": "greentech", "label": "GreenTech & ESG", "expected_nodes_count": 2 },
+    { "id": "cybersecurity", "label": "Cybersecurity", "expected_nodes_count": 2 }
+  ],
+  "summits_available": [
+    { "id": "all", "label": "All Summits (142)" },
+    { "id": "ai_riser", "label": "AI Riser Vietnam Demo Day 2026", "date": "2026-08-20", "venue": "NIC Hanoi" },
+    { "id": "tech_night", "label": "Tech Networking Night Q2/2026", "date": "2026-06-15", "venue": "The Loop HCMC" },
+    { "id": "sea_summit", "label": "SEA Startup Summit 2025", "date": "2025-11-10", "venue": "Danang Innovation Park" },
+    { "id": "fintech_expo", "label": "Vietnam FinTech Expo 2026", "date": "2026-04-22", "venue": "SECC HCMC" }
+  ]
+}

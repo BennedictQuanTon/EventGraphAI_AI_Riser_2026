@@ -14,7 +14,9 @@ import {
   Layers, 
   ExternalLink, 
   ShieldCheck, 
-  Maximize2 
+  Maximize2,
+  Check,
+  RefreshCw
 } from 'lucide-react';
 
 export default function GraphView() {
@@ -22,40 +24,237 @@ export default function GraphView() {
   const containerRef = useRef(null);
   const [selectedIndustry, setSelectedIndustry] = useState('all');
   const [selectedEvent, setSelectedEvent] = useState('all');
+  const [activeFilter, setActiveFilter] = useState({ industry: 'all', event: 'all' });
   const [selectedNode, setSelectedNode] = useState(null);
 
-  // Deterministic Fixed Nodes Structure (Spacious, No Overlap, No Vibration)
-  const initialNodes = [
-    // Center Event Hub
-    { id: 'e1', label: 'AI Riser Demo Day 2026', type: 'event', x: 0, y: 0, radius: 38, venue: 'NIC Hanoi', date: 'Aug 20, 2026', attendees: '4,200+' },
+  // Full Rich Master Nodes Dataset Covering All Filter Options
+  const masterNodes = [
+    // Center Event Hubs
+    { 
+      id: 'e1', 
+      label: 'AI Riser Demo Day 2026', 
+      type: 'event', 
+      x: 0, 
+      y: 0, 
+      radius: 40, 
+      venue: 'NIC Hanoi', 
+      date: 'Aug 20, 2026', 
+      attendees: '4,200+',
+      events: ['all', 'ai_riser'],
+      industry: 'all'
+    },
+    { 
+      id: 'e2', 
+      label: 'Tech Networking Night', 
+      type: 'event', 
+      x: 200, 
+      y: -300, 
+      radius: 34, 
+      venue: 'The Loop HCMC', 
+      date: 'Jun 15, 2026', 
+      attendees: '1,800+',
+      events: ['all', 'tech_night'],
+      industry: 'all'
+    },
     
-    // Top Center Company & Lead
-    { id: 'c5', label: 'National Innovation Hub', type: 'company', industry: 'Incubation Center', domain: 'innovatehub.org.vn', x: 0, y: -270, radius: 34 },
-    { id: 'p6', label: 'Do Thu Trang', role: 'Head of Partnerships', type: 'person', company: 'National Innovation Hub', avatar: 'TT', email: 'trang.do@innovatehub.org.vn', x: 140, y: -310, radius: 25 },
+    // 1. Artificial Intelligence & DeepTech Cluster
+    { 
+      id: 'c1', 
+      label: 'NextGen AI Vietnam', 
+      type: 'company', 
+      industry: 'ai', 
+      industryLabel: 'Artificial Intelligence & DeepTech',
+      domain: 'nextgenai.vn', 
+      x: -340, 
+      y: -160, 
+      radius: 36,
+      events: ['all', 'ai_riser', 'tech_night']
+    },
+    { 
+      id: 'p1', 
+      label: 'Tran Duc Anh', 
+      role: 'Executive Director', 
+      type: 'person', 
+      company: 'NextGen AI Vietnam', 
+      industry: 'ai',
+      avatar: 'DA', 
+      email: 'duc.anh@nextgenai.vn', 
+      x: -500, 
+      y: -210, 
+      radius: 25,
+      events: ['all', 'ai_riser', 'tech_night']
+    },
+    { 
+      id: 'p5', 
+      label: 'Le Hoang Quan', 
+      role: 'Senior AI Lead', 
+      type: 'person', 
+      company: 'NextGen AI Vietnam', 
+      industry: 'ai',
+      avatar: 'LQ', 
+      email: 'quan.le@nextgenai.vn', 
+      x: -500, 
+      y: -110, 
+      radius: 25,
+      events: ['all', 'ai_riser']
+    },
 
-    // Top-Left: NextGen AI & Executives
-    { id: 'c1', label: 'NextGen AI Vietnam', type: 'company', industry: 'Artificial Intelligence & Analytics', domain: 'nextgenai.vn', x: -330, y: -160, radius: 35 },
-    { id: 'p1', label: 'Nguyen Thanh Son', role: 'Director of BD', type: 'person', company: 'NextGen AI Vietnam', avatar: 'NS', email: 'son.nguyen@nextgenai.vn', x: -480, y: -210, radius: 25 },
-    { id: 'p5', label: 'Le Hoang Quan', role: 'Senior AI Lead', type: 'person', company: 'NextGen AI Vietnam', avatar: 'LQ', email: 'quan.le@nextgenai.vn', x: -480, y: -110, radius: 25 },
+    // 2. Financial Technology (FinTech) Cluster
+    { 
+      id: 'c2', 
+      label: 'VinFintech Payments', 
+      type: 'company', 
+      industry: 'fintech', 
+      industryLabel: 'Financial Technology (FinTech)',
+      domain: 'vinfintech.com', 
+      x: 340, 
+      y: -160, 
+      radius: 36,
+      events: ['all', 'ai_riser', 'tech_night', 'fintech_expo']
+    },
+    { 
+      id: 'p2', 
+      label: 'Alex Carter', 
+      role: 'Co-Founder & CEO', 
+      type: 'person', 
+      company: 'VinFintech Payments', 
+      industry: 'fintech',
+      avatar: 'AC', 
+      email: 'alex.carter@vinfintech.com', 
+      x: 500, 
+      y: -160, 
+      radius: 25,
+      events: ['all', 'ai_riser', 'fintech_expo']
+    },
+    { 
+      id: 'p2b', 
+      label: 'Tran Thi Mai Anh', 
+      role: 'President & Founder', 
+      type: 'person', 
+      company: 'VinFintech Payments', 
+      industry: 'fintech',
+      avatar: 'MA', 
+      email: 'maianh.tran@vinfinpay.com', 
+      x: 440, 
+      y: -60, 
+      radius: 24,
+      events: ['all', 'tech_night', 'fintech_expo']
+    },
 
-    // Top-Right: VinFintech & Founder
-    { id: 'c2', label: 'VinFintech Payments', type: 'company', industry: 'Financial Technology (FinTech)', domain: 'vinfinpay.com', x: 330, y: -160, radius: 35 },
-    { id: 'p2', label: 'Tran Thi Mai Anh', role: 'CEO & Founder', type: 'person', company: 'VinFintech Payments', avatar: 'MA', email: 'maianh.tran@vinfinpay.com', x: 480, y: -160, radius: 25 },
+    // 3. Venture Capital & Funds Cluster
+    { 
+      id: 'c3', 
+      label: 'Dragon Venture Capital', 
+      type: 'company', 
+      industry: 'vc', 
+      industryLabel: 'Venture Capital & Funds',
+      domain: 'dragonvc.co', 
+      x: -340, 
+      y: 180, 
+      radius: 36,
+      events: ['all', 'ai_riser', 'sea_summit']
+    },
+    { 
+      id: 'p3', 
+      label: 'Alexander Chen', 
+      role: 'Partner | Founder', 
+      type: 'person', 
+      company: 'Dragon Venture Capital', 
+      industry: 'vc',
+      avatar: 'AC', 
+      email: 'alex.chen@dragonvc.co', 
+      x: -500, 
+      y: 180, 
+      radius: 25,
+      events: ['all', 'ai_riser', 'sea_summit']
+    },
+    { 
+      id: 'c4', 
+      label: 'Nexus Ventures', 
+      type: 'company', 
+      industry: 'vc', 
+      industryLabel: 'Venture Capital & Funds',
+      domain: 'nexusventures.co', 
+      x: 340, 
+      y: 180, 
+      radius: 36,
+      events: ['all', 'ai_riser', 'tech_night']
+    },
+    { 
+      id: 'p4', 
+      label: 'Sarah Jenkins', 
+      role: 'Managing Partner', 
+      type: 'person', 
+      company: 'Nexus Ventures', 
+      industry: 'vc',
+      avatar: 'SJ', 
+      email: 'sarah@nexusventures.co', 
+      x: 500, 
+      y: 180, 
+      radius: 25,
+      events: ['all', 'ai_riser', 'tech_night']
+    },
 
-    // Bottom-Left: Dragon VC & Investor
-    { id: 'c3', label: 'Dragon Venture Capital', type: 'company', industry: 'Venture Capital & Funds', domain: 'dragonvc.fund', x: -330, y: 170, radius: 35 },
-    { id: 'p3', label: 'Pham Minh Duc', role: 'Managing Partner', type: 'person', company: 'Dragon Venture Capital', avatar: 'MD', email: 'duc.pham@dragonvc.fund', x: -480, y: 170, radius: 25 },
+    // 4. Incubation & Ecosystem Hub
+    { 
+      id: 'c5', 
+      label: 'National Innovation Hub', 
+      type: 'company', 
+      industry: 'incubation', 
+      industryLabel: 'Incubation & Ecosystem',
+      domain: 'innovatehub.org.vn', 
+      x: -60, 
+      y: -280, 
+      radius: 34,
+      events: ['all', 'ai_riser', 'tech_night', 'sea_summit']
+    },
+    { 
+      id: 'p6', 
+      label: 'Do Thu Trang', 
+      role: 'Head of Partnerships', 
+      type: 'person', 
+      company: 'National Innovation Hub', 
+      industry: 'incubation',
+      avatar: 'TT', 
+      email: 'trang.do@innovatehub.org.vn', 
+      x: 60, 
+      y: -320, 
+      radius: 25,
+      events: ['all', 'ai_riser', 'sea_summit']
+    },
 
-    // Bottom-Right: Nexus Ventures & Partner
-    { id: 'c4', label: 'Nexus Ventures SG', type: 'company', industry: 'Global Tech Fund', domain: 'nexusventures.sg', x: 330, y: 170, radius: 35 },
-    { id: 'p4', label: 'Alex Chen', role: 'General Partner', type: 'person', company: 'Nexus Ventures SG', avatar: 'AC', email: 'alex.chen@nexusventures.sg', x: 480, y: 170, radius: 25 },
-
-    // Bottom-Center: ESG & Cyber Startups
-    { id: 'p7', label: 'Vu Dang Khoa', role: 'CTO & Co-Founder', type: 'person', company: 'GreenFuture ESG', avatar: 'VK', email: 'khoa.vu@greenfuture.vn', x: -150, y: 290, radius: 25 },
-    { id: 'p8', label: 'Bui Quoc Hung', role: 'VP of Security', type: 'person', company: 'CyberGuard Security', avatar: 'BH', email: 'hung.bui@cyberguard.vn', x: 150, y: 290, radius: 25 }
+    // 5. GreenTech & Cybersecurity Nodes
+    { 
+      id: 'p7', 
+      label: 'Vu Dang Khoa', 
+      role: 'CTO & Co-Founder', 
+      type: 'person', 
+      company: 'GreenFuture ESG Tech', 
+      industry: 'greentech',
+      avatar: 'VK', 
+      email: 'khoa.vu@greenfuture.vn', 
+      x: -160, 
+      y: 300, 
+      radius: 25,
+      events: ['all', 'ai_riser']
+    },
+    { 
+      id: 'p8', 
+      label: 'Bui Quoc Hung', 
+      role: 'VP of Security', 
+      type: 'person', 
+      company: 'CyberGuard Security', 
+      industry: 'cybersecurity',
+      avatar: 'BH', 
+      email: 'hung.bui@cyberguard.vn', 
+      x: 160, 
+      y: 300, 
+      radius: 25,
+      events: ['all', 'ai_riser', 'tech_night']
+    }
   ];
 
-  const initialLinks = [
+  const masterLinks = [
     // Event Hub Central Connections
     { source: 'p1', target: 'e1', label: 'KEYNOTE_SPEAKER', color: '#0052CC' },
     { source: 'p2', target: 'e1', label: 'KEYNOTE_SPEAKER', color: '#FF8C00' },
@@ -65,28 +264,42 @@ export default function GraphView() {
     { source: 'p7', target: 'e1', label: 'ATTENDED', color: '#94A3B8', dashed: true },
     { source: 'p8', target: 'e1', label: 'PANELIST', color: '#0052CC' },
 
+    // Tech Networking Night Connections
+    { source: 'p1', target: 'e2', label: 'ATTENDED', color: '#0052CC' },
+    { source: 'p2b', target: 'e2', label: 'SPEAKER', color: '#FF8C00' },
+    { source: 'p4', target: 'e2', label: 'SPONSOR', color: '#A33500' },
+
     // Affiliations
     { source: 'p1', target: 'c1', label: 'AFFILIATED_WITH', color: '#0052CC' },
     { source: 'p5', target: 'c1', label: 'RESEARCH_LEAD', color: '#0052CC' },
-    { source: 'p2', target: 'c2', label: 'FOUNDER_OF', color: '#FF8C00' },
+    { source: 'p2', target: 'c2', label: 'CO_FOUNDER', color: '#FF8C00' },
+    { source: 'p2b', target: 'c2', label: 'FOUNDER_PRESIDENT', color: '#FF8C00' },
     { source: 'p3', target: 'c3', label: 'MANAGING_PARTNER', color: '#A33500' },
     { source: 'p4', target: 'c4', label: 'GENERAL_PARTNER', color: '#A33500' },
     { source: 'p6', target: 'c5', label: 'OPERATES', color: '#0052CC' },
 
-    // Cross-Company Co-investments
+    // Co-investments
     { source: 'c3', target: 'c1', label: 'INVESTED_IN', color: '#A33500', dashed: true },
     { source: 'c4', target: 'c2', label: 'SYNDICATE_MATCH', color: '#059669', dashed: true }
   ];
 
   // Camera & Interaction State
   const graphState = useRef({
-    nodes: JSON.parse(JSON.stringify(initialNodes)),
-    links: initialLinks,
+    nodes: JSON.parse(JSON.stringify(masterNodes)),
+    links: masterLinks,
     camera: { x: 0, y: 0, zoom: 0.95 },
     isDragging: false,
     dragNode: null,
     lastMouse: { x: 0, y: 0 }
   });
+
+  // Filter Helper: Check if node matches active filter criteria
+  const isNodeMatching = useCallback((node) => {
+    const { industry, event } = activeFilter;
+    const matchIndustry = industry === 'all' || node.industry === industry || (node.type === 'event');
+    const matchEvent = event === 'all' || (node.events && node.events.includes(event));
+    return matchIndustry && matchEvent;
+  }, [activeFilter]);
 
   const drawGraph = useCallback(() => {
     const canvas = canvasRef.current;
@@ -98,6 +311,8 @@ export default function GraphView() {
 
     const { nodes, links, camera } = graphState.current;
     const nodeMap = new Map(nodes.map(n => [n.id, n]));
+
+    const isFilterActive = activeFilter.industry !== 'all' || activeFilter.event !== 'all';
 
     // Reset & apply camera transform
     ctx.save();
@@ -119,17 +334,26 @@ export default function GraphView() {
       }
     }
 
-    // 2. Draw Edges with Directional Lines & Labels
+    // 2. Draw Edges
     links.forEach(l => {
       const source = nodeMap.get(l.source);
       const target = nodeMap.get(l.target);
       if (!source || !target) return;
 
+      const sourceMatches = isNodeMatching(source);
+      const targetMatches = isNodeMatching(target);
+      const edgeMatches = sourceMatches && targetMatches;
+
+      ctx.save();
+      if (isFilterActive && !edgeMatches) {
+        ctx.globalAlpha = 0.15;
+      }
+
       ctx.beginPath();
       ctx.moveTo(source.x, source.y);
       ctx.lineTo(target.x, target.y);
       ctx.strokeStyle = l.dashed ? '#CBD5E1' : l.color || '#0052CC';
-      ctx.lineWidth = l.dashed ? 1.8 : 2.5;
+      ctx.lineWidth = edgeMatches && isFilterActive ? 3.2 : l.dashed ? 1.8 : 2.5;
       if (l.dashed) {
         ctx.setLineDash([5, 5]);
       } else {
@@ -146,23 +370,36 @@ export default function GraphView() {
         const labelWidth = ctx.measureText(l.label).width;
 
         ctx.fillStyle = '#FFFFFF';
-        ctx.strokeStyle = '#CBD5E1';
+        ctx.strokeStyle = edgeMatches && isFilterActive ? '#0052CC' : '#CBD5E1';
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.roundRect(midX - labelWidth / 2 - 6, midY - 10, labelWidth + 12, 20, 5);
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = '#475569';
+        ctx.fillStyle = edgeMatches && isFilterActive ? '#0052CC' : '#475569';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(l.label, midX, midY);
       }
+      ctx.restore();
     });
 
     // 3. Draw Nodes
     nodes.forEach(n => {
       const isSelected = selectedNode?.id === n.id;
+      const matches = isNodeMatching(n);
+
+      ctx.save();
+      if (isFilterActive && !matches) {
+        ctx.globalAlpha = 0.18;
+      }
+
+      // Highlight Glow effect if matches active filter
+      if (isFilterActive && matches) {
+        ctx.shadowColor = n.type === 'company' ? 'rgba(0, 82, 204, 0.4)' : 'rgba(255, 140, 0, 0.45)';
+        ctx.shadowBlur = 16;
+      }
 
       if (n.type === 'event') {
         // Event Central Hub (Orange Hexagonal Diamond)
@@ -227,27 +464,29 @@ export default function GraphView() {
         ctx.fillText(n.avatar || 'EX', n.x, n.y);
       }
 
-      // Clean Distinct Node Label Pill
+      // 4. Clean Distinct Node Label Pill
       const labelY = n.y + n.radius + 18;
       ctx.font = isSelected ? '800 14px Plus Jakarta Sans, sans-serif' : '700 13.5px Plus Jakarta Sans, sans-serif';
       const labelWidth = ctx.measureText(n.label).width;
 
       ctx.fillStyle = '#FFFFFF';
-      ctx.strokeStyle = isSelected ? '#0052CC' : '#CBD5E1';
-      ctx.lineWidth = isSelected ? 2 : 1.2;
+      ctx.strokeStyle = isSelected ? '#0052CC' : matches && isFilterActive ? '#0052CC' : '#CBD5E1';
+      ctx.lineWidth = isSelected ? 2 : matches && isFilterActive ? 1.8 : 1.2;
       ctx.beginPath();
       ctx.roundRect(n.x - labelWidth / 2 - 10, labelY - 12, labelWidth + 20, 24, 6);
       ctx.fill();
       ctx.stroke();
 
-      ctx.fillStyle = isSelected ? '#0052CC' : '#0F172A';
+      ctx.fillStyle = isSelected ? '#0052CC' : matches && isFilterActive ? '#0052CC' : '#0F172A';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(n.label, n.x, labelY);
+
+      ctx.restore();
     });
 
     ctx.restore();
-  }, [selectedNode]);
+  }, [selectedNode, activeFilter, isNodeMatching]);
 
   // Handle Resize & Canvas Initialization
   const resizeCanvas = useCallback(() => {
@@ -281,9 +520,7 @@ export default function GraphView() {
       drawGraph();
     };
 
-    // Attach with { passive: false } so preventDefault() stops window scrolling!
     canvas.addEventListener('wheel', handleNativeWheel, { passive: false });
-
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
@@ -305,7 +542,6 @@ export default function GraphView() {
     const width = canvas.width / dpr;
     const height = canvas.height / dpr;
 
-    // Convert screen coordinates to world coordinates
     const wx = (mx - (width / 2 + camera.x)) / camera.zoom;
     const wy = (my - (height / 2 + camera.y)) / camera.zoom;
 
@@ -364,10 +600,40 @@ export default function GraphView() {
 
   const handleResetCamera = () => {
     graphState.current.camera = { x: 0, y: 0, zoom: 0.95 };
-    graphState.current.nodes = JSON.parse(JSON.stringify(initialNodes));
+    graphState.current.nodes = JSON.parse(JSON.stringify(masterNodes));
     setSelectedNode(null);
     drawGraph();
   };
+
+  // Apply Filter Handler
+  const handleApplyFilter = (e) => {
+    e?.preventDefault();
+    setActiveFilter({ industry: selectedIndustry, event: selectedEvent });
+
+    // Focus camera onto center or filtered nodes
+    if (selectedIndustry === 'fintech') {
+      graphState.current.camera = { x: -140, y: 30, zoom: 1.15 };
+    } else if (selectedIndustry === 'ai') {
+      graphState.current.camera = { x: 140, y: 30, zoom: 1.15 };
+    } else if (selectedIndustry === 'vc') {
+      graphState.current.camera = { x: 0, y: -60, zoom: 1.1 };
+    } else {
+      graphState.current.camera = { x: 0, y: 0, zoom: 0.95 };
+    }
+    setTimeout(drawGraph, 50);
+  };
+
+  const handleClearFilter = () => {
+    setSelectedIndustry('all');
+    setSelectedEvent('all');
+    setActiveFilter({ industry: 'all', event: 'all' });
+    graphState.current.camera = { x: 0, y: 0, zoom: 0.95 };
+    setTimeout(drawGraph, 50);
+  };
+
+  // Count matched entities
+  const matchedNodesCount = masterNodes.filter(n => isNodeMatching(n)).length;
+  const isFilterActive = activeFilter.industry !== 'all' || activeFilter.event !== 'all';
 
   return (
     <div 
@@ -384,7 +650,7 @@ export default function GraphView() {
         boxShadow: 'var(--shadow-sm)'
       }}
     >
-      {/* Interactive Fixed Force Canvas (Wheel zoom does not scroll page) */}
+      {/* Interactive Fixed Force Canvas */}
       <canvas 
         ref={canvasRef}
         onMouseDown={handleMouseDown}
@@ -398,10 +664,10 @@ export default function GraphView() {
         position: 'absolute',
         top: '24px',
         left: '24px',
-        width: '310px',
+        width: '320px',
         backgroundColor: '#FFFFFF',
         border: '1px solid var(--border-color)',
-        borderRadius: '14px',
+        borderRadius: '16px',
         padding: '22px',
         boxShadow: 'var(--shadow-md)',
         display: 'flex',
@@ -409,11 +675,22 @@ export default function GraphView() {
         gap: '16px',
         zIndex: 10
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Filter size={19} color="var(--primary)" />
-          <h4 style={{ fontSize: '17px', fontWeight: '800', color: 'var(--text-main)' }}>
-            Filter Graph Dataset
-          </h4>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Filter size={20} color="var(--primary)" />
+            <h4 style={{ fontSize: '17px', fontWeight: '800', color: 'var(--text-main)' }}>
+              Filter Graph Dataset
+            </h4>
+          </div>
+          {isFilterActive && (
+            <button 
+              onClick={handleClearFilter}
+              className="btn btn-subtle" 
+              style={{ fontSize: '12px', padding: '2px 6px', color: 'var(--danger)' }}
+            >
+              Reset
+            </button>
+          )}
         </div>
 
         <div>
@@ -430,6 +707,9 @@ export default function GraphView() {
             <option value="ai">Artificial Intelligence & DeepTech</option>
             <option value="fintech">Financial Technology (FinTech)</option>
             <option value="vc">Venture Capital & Funds</option>
+            <option value="greentech">GreenTech & ESG</option>
+            <option value="cybersecurity">Cybersecurity Infrastructure</option>
+            <option value="incubation">Incubation & Ecosystem Hubs</option>
           </select>
         </div>
 
@@ -446,15 +726,37 @@ export default function GraphView() {
             <option value="all">All Summits (142)</option>
             <option value="ai_riser">AI Riser Vietnam Demo Day 2026</option>
             <option value="tech_night">Tech Networking Night Q2/2026</option>
+            <option value="sea_summit">SEA Startup Summit 2025</option>
+            <option value="fintech_expo">Vietnam FinTech Expo 2026</option>
           </select>
         </div>
 
         <button 
+          onClick={handleApplyFilter}
           className="btn btn-primary" 
           style={{ width: '100%', padding: '11px', fontSize: '14.5px', marginTop: '4px' }}
         >
-          Apply Active Filter
+          <Check size={16} />
+          <span>Apply Active Filter</span>
         </button>
+
+        {isFilterActive && (
+          <div style={{
+            padding: '10px 12px',
+            borderRadius: '10px',
+            backgroundColor: 'var(--primary-light)',
+            border: '1px solid var(--primary-border)',
+            fontSize: '12.5px',
+            color: 'var(--primary)',
+            fontWeight: '700',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}>
+            <span>✨ Showing {matchedNodesCount} Matched Nodes</span>
+            <span style={{ fontSize: '11px', textDecoration: 'underline', cursor: 'pointer' }} onClick={handleClearFilter}>Clear</span>
+          </div>
+        )}
       </div>
 
       {/* Floating Zoom & Pan Controls Bottom Left */}
@@ -546,7 +848,7 @@ export default function GraphView() {
           zIndex: 20
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span className={selectedNode.type === 'company' ? 'badge badge-primary' : 'badge badge-secondary'} style={{ fontSize: '13px', padding: '4px 10px' }}>
+            <span className={selectedNode.type === 'company' ? 'badge badge-primary' : selectedNode.type === 'event' ? 'badge badge-warning' : 'badge badge-secondary'} style={{ fontSize: '13px', padding: '4px 10px' }}>
               {selectedNode.type.toUpperCase()}
             </span>
             <button onClick={() => setSelectedNode(null)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
@@ -559,7 +861,7 @@ export default function GraphView() {
               {selectedNode.label}
             </h4>
             <p style={{ fontSize: '14.5px', color: 'var(--primary)', fontWeight: '700', marginTop: '3px' }}>
-              {selectedNode.role || selectedNode.industry}
+              {selectedNode.role || selectedNode.industryLabel || selectedNode.venue}
             </p>
           </div>
 

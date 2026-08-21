@@ -1,0 +1,8 @@
+canonical_node_id,entity_type,name_or_title,organization_affiliation,contact_email,phone_number,verification_status,grounding_source,last_synced_at
+N-PERSON-001,PERSON,Tran Duc Anh,NextGen AI Solutions (Vietnam) Co., Ltd.,duc.anh@nextgenai.vn,+84 901 234 567,VERIFIED_GROUNDED,Google Vision OCR,2026-08-21T08:00:00Z
+N-PERSON-002,PERSON,Alex Carter,VinFintech Payments,alex.carter@vinfintech.com,+1 212 555 0199,VERIFIED_GROUNDED,Google Vision OCR,2026-08-21T08:00:00Z
+N-PERSON-003,PERSON,Alexander Chen,Dragon Venture Capital,alex.chen@dragonvc.co,+1 650 555 0188,VERIFIED_GROUNDED,Google Vision OCR,2026-08-21T08:00:00Z
+N-PERSON-004,PERSON,Sarah Jenkins,Nexus Ventures,sarah@nexusventures.co,+1 555 123 4567,VERIFIED_GROUNDED,Google Vision OCR,2026-08-21T08:00:00Z
+N-ORG-101,COMPANY,NextGen AI Solutions (Vietnam) Co., Ltd.,N/A,info@nextgenai.vn,+84 24 3999 8888,VERIFIED_GROUNDED,Google Search Grounding,2026-08-21T08:00:00Z
+N-ORG-102,COMPANY,VinFintech Payments JSC,N/A,contact@vinfintech.com,+84 28 3888 7777,VERIFIED_GROUNDED,Google Search Grounding,2026-08-21T08:00:00Z
+N-ORG-103,COMPANY,Dragon Venture Capital,N/A,deals@dragonvc.co,+1 650 555 0188,VERIFIED_GROUNDED,Google Search Grounding,2026-08-21T08:00:00Z
